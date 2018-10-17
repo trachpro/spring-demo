@@ -2,10 +2,12 @@ package springmvc.demo.Repositories;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
-import springmvc.demo.models.Pet;
+import springmvc.demo.models.User;
+
+import java.util.List;
 
 @Repository
-public interface PetsRepository extends MongoRepository<Pet, String> {
+public interface UsersRepository extends MongoRepository<User, String> {
 //    public void deleteByName
-    public Pet findPetByName(String name);
+    public User findUserByEmail(String email);
 }
