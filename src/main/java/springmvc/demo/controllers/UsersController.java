@@ -8,6 +8,7 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.Repositories.UsersRepository;
 import springmvc.demo.models.User;
@@ -23,6 +24,9 @@ public class UsersController {
 
     @Autowired
     private UsersRepository usersRepository;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
     public void setUsersRepository(UsersRepository user) {
 
@@ -69,7 +73,7 @@ public class UsersController {
 
             try {
 
-                usersRepository.insert(new User(name, password, email, role, address));
+                usersRepository.insert(new User(name, passwordEncoder.encode(password), email, role, address));
                 return true;
             } catch (Exception e) {
 
