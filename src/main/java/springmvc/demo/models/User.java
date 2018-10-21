@@ -2,10 +2,18 @@ package springmvc.demo.models;
 
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import io.github.kaiso.relmongo.annotation.CascadeType;
+import io.github.kaiso.relmongo.annotation.FetchType;
+import io.github.kaiso.relmongo.annotation.JoinProperty;
+import io.github.kaiso.relmongo.annotation.OneToMany;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import org.springframework.hateoas.ResourceSupport;
+
+//import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 //import java.util.ArrayList;
 //import java.util.List;
@@ -37,6 +45,11 @@ public class User  extends ResourceSupport{
 
     @Field("isConfirmed")
     private Boolean isConfirmed;
+
+    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @JoinProperty(name = "user_id")
+    private List<Reservation> reservations = new ArrayList<>();
+
 
     public User(){}
 
@@ -127,4 +140,12 @@ public class User  extends ResourceSupport{
         isConfirmed = confirmed;
     }
 
+    public List<Reservation> getReservations() {
+        return reservations;
+    }
+
+    public void setReservations(List<Reservation> reservations) {
+
+        this.reservations = reservations;
+    }
 }
