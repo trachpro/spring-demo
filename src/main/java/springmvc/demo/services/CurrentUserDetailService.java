@@ -12,6 +12,8 @@ import springmvc.demo.Repositories.UsersRepository;
 import springmvc.demo.models.User;
 
 import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Set;
 
 @Service
@@ -24,20 +26,18 @@ public class CurrentUserDetailService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
-        System.out.println("loading user" + s);
-        User user = usersRepository.findUserByEmail("tu.phamminh.2207@gmail.com");
-
-        System.out.println(user.getName());
+        User user = usersRepository.findUserByEmail(s);
 
         if(user == null) {
 
             throw new UsernameNotFoundException("User not found");
         }
 
-        Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
+        List<GrantedAuthority> listAuth = new LinkedList<>();
 
-        grantedAuthorities.add(new SimpleGrantedAuthority(user.getRole()));
+        listAuth.add(new SimpleGrantedAuthority(user.getRole()));
+        listAuth.add(new SimpleGrantedAuthority(user.get_id()));
 
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), grantedAuthorities);
+        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), listAuth);
     }
 }

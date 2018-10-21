@@ -10,4 +10,6 @@ import java.util.List;
 public interface UsersRepository extends MongoRepository<User, String> {
 //    public void deleteByName
     public User findUserByEmail(String email);
+    public User findUserBy_id(String id);
+    public Long deleteUserBy_id(String id);
 }

@@ -1,5 +1,7 @@
 package springmvc.demo.models;
 
+import com.fasterxml.jackson.annotation.JsonAutoDetect;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -9,7 +11,7 @@ import org.springframework.hateoas.ResourceSupport;
 //import java.util.List;
 
 @Document(collection = "users")
-
+@JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
 public class User  extends ResourceSupport{
 
     @Id
@@ -36,6 +38,13 @@ public class User  extends ResourceSupport{
     @Field("isConfirmed")
     private Boolean isConfirmed;
 
+    public User(){}
+
+    public User(String email, String password) {
+        this.email = email;
+        this.password = password;
+    }
+
     public User(String name, String password, String email, String role, String address){
 
         this.name = name;
@@ -46,6 +55,16 @@ public class User  extends ResourceSupport{
         isConfirmed = false;
     }
 
+    @JsonProperty("_id")
+    public String get_id() {
+        return this._id;
+    }
+
+    public void set_id(String Id) {
+        this._id = Id;
+    }
+
+    @JsonProperty("name")
     public String getName() {
         return name;
     }
@@ -54,6 +73,7 @@ public class User  extends ResourceSupport{
         this.name = name;
     }
 
+    @JsonProperty("password")
     public String getPassword() {
         return password;
     }
@@ -62,6 +82,7 @@ public class User  extends ResourceSupport{
         this.password = password;
     }
 
+    @JsonProperty("email")
     public String getEmail() {
         return email;
     }
@@ -70,6 +91,7 @@ public class User  extends ResourceSupport{
         this.email = email;
     }
 
+    @JsonProperty("role")
     public String getRole() {
         return role;
     }
@@ -78,6 +100,7 @@ public class User  extends ResourceSupport{
         this.role = role;
     }
 
+    @JsonProperty("address")
     public String getAddress() {
         return address;
     }
@@ -86,6 +109,7 @@ public class User  extends ResourceSupport{
         this.address = address;
     }
 
+    @JsonProperty("profileImg")
     public String getProfileImg() {
         return profileImg;
     }
@@ -94,6 +118,7 @@ public class User  extends ResourceSupport{
         this.profileImg = profileImg;
     }
 
+    @JsonProperty("isConfirmed")
     public Boolean getConfirmed() {
         return isConfirmed;
     }

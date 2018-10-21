@@ -1,12 +1,12 @@
 package springmvc.demo.Hooks;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-import org.springframework.security.web.util.matcher.RequestMatcher;
 import springmvc.demo.models.User;
 import springmvc.demo.services.TokenAuthenticationService;
 
@@ -27,16 +27,24 @@ public class JWTLoginFilter extends AbstractAuthenticationProcessingFilter {
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response) throws AuthenticationException, IOException, ServletException {
 
-        System.out.println(request.getParameter("email"));
+        User user = new ObjectMapper().readValue(request.getInputStream(), User.class);
+
+        System.out.println("login user: " + user.getEmail());
+
         return getAuthenticationManager().authenticate( new UsernamePasswordAuthenticationToken(
-                request.getParameter("email"),
-                request.getParameter("password"),
+                user.getEmail(),
+                user.getPassword(),
                 Collections.emptyList()
         ));
     }
 
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authentication) throws IOException, ServletException {
-        TokenAuthenticationService.addAuthentication(response, authentication.getName());
+
+        try {
+            TokenAuthenticationService.addAuthentication(response, authentication);
+        } catch (Exception e) {
+            System.err.println(e);
+        }
     }
 }
