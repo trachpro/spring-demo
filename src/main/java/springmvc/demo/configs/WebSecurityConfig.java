@@ -3,11 +3,11 @@ package springmvc.demo.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -17,7 +17,6 @@ import springmvc.demo.Hooks.JWTLoginFilter;
 import springmvc.demo.services.CurrentUserDetailService;
 
 @Configuration
-@EnableWebSecurity
 @Order(2)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
@@ -26,16 +25,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        System.out.println("the second");
         http.csrf().disable().authorizeRequests()
-//                .antMatchers("/").permitAll() // request k cần phải xác thực
-                .antMatchers(HttpMethod.POST, "/login")
-                .permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/users").permitAll()
-//                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .and()
-                // add các filter vào ứng dụng của chúng ta, thứ mà sẽ hứng các request để xử lý trước khi tới các xử lý trong controllers
-                // có xét đên thứ tự của các filter
                 .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

@@ -3,7 +3,6 @@ package springmvc.demo.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -18,8 +17,8 @@ import springmvc.demo.Hooks.JWTCustomLoginFilter;
 import springmvc.demo.services.StaffUserDetailService;
 
 
-@Configuration
 @EnableWebSecurity
+@Configuration
 @Order(1)
 public class WebSecurityConfig2 extends WebSecurityConfigurerAdapter {
 
@@ -28,8 +27,10 @@ public class WebSecurityConfig2 extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/staff/login").permitAll()
+        System.out.println("the first");
+        http
+                .antMatcher("/staff/login").csrf().disable().authorizeRequests()
+                .antMatchers(HttpMethod.POST, "/login").permitAll()
                 .and()
                 .addFilterBefore(new JWTCustomLoginFilter("/staff/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
