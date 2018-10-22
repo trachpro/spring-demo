@@ -30,7 +30,7 @@ public class WebSecurityConfig2 extends WebSecurityConfigurerAdapter {
         System.out.println("the first");
         http
                 .antMatcher("/staff/login").csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/login").permitAll()
+                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
                 .and()
                 .addFilterBefore(new JWTCustomLoginFilter("/staff/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
