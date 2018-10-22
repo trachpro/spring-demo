@@ -32,7 +32,7 @@ public class JWTCustomLoginFilter extends AbstractAuthenticationProcessingFilter
         System.out.println("staff login: " + user.getEmail());
 
         return getAuthenticationManager().authenticate( new UsernamePasswordAuthenticationToken(
-                user.getEmail().concat(" 1"),
+                user.getEmail(),
                 user.getPassword(),
                 Collections.emptyList()
         ));

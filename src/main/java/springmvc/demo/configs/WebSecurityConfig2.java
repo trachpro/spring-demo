@@ -3,6 +3,7 @@ package springmvc.demo.configs;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -13,30 +14,24 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import springmvc.demo.Hooks.JWTAuthenticationFilter;
-import springmvc.demo.Hooks.JWTLoginFilter;
-import springmvc.demo.services.CurrentUserDetailService;
+import springmvc.demo.Hooks.JWTCustomLoginFilter;
+import springmvc.demo.services.StaffUserDetailService;
+
 
 @Configuration
 @EnableWebSecurity
-@Order(2)
-public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+@Order(1)
+public class WebSecurityConfig2 extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private CurrentUserDetailService currentUserDetailService;
+    private StaffUserDetailService currentUserDetailService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.csrf().disable().authorizeRequests()
-//                .antMatchers("/").permitAll() // request k cần phải xác thực
-                .antMatchers(HttpMethod.POST, "/login")
-                .permitAll()
-                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
-                .antMatchers(HttpMethod.GET, "/api/users").permitAll()
-//                .anyRequest().authenticated()
+                .antMatchers(HttpMethod.POST, "/staff/login").permitAll()
                 .and()
-                // add các filter vào ứng dụng của chúng ta, thứ mà sẽ hứng các request để xử lý trước khi tới các xử lý trong controllers
-                // có xét đên thứ tự của các filter
-                .addFilterBefore(new JWTLoginFilter("/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(new JWTCustomLoginFilter("/staff/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }
 
@@ -51,4 +46,3 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         return new BCryptPasswordEncoder();
     }
 }
-
