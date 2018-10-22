@@ -8,13 +8,12 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import springmvc.demo.Repositories.StaffsRepository;
 import springmvc.demo.Repositories.UsersRepository;
+import springmvc.demo.models.StaffModel;
 import springmvc.demo.models.User;
 
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Service
 public class CurrentUserDetailService implements UserDetailsService {
@@ -22,22 +21,45 @@ public class CurrentUserDetailService implements UserDetailsService {
     @Autowired
     private UsersRepository usersRepository;
 
+    @Autowired
+    private StaffsRepository staffsRepository;
+
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
-        User user = usersRepository.findUserByEmail(s);
+        String[] email = s.split(" ");
 
-        if(user == null) {
+        if(email.length == 1) {
 
-            throw new UsernameNotFoundException("User not found");
+            User user = usersRepository.findUserByEmail(s);
+
+            if(user == null) {
+
+                throw new UsernameNotFoundException("User not found");
+            }
+
+            List<GrantedAuthority> listAuth = new LinkedList<>();
+
+            listAuth.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
+            listAuth.add(new SimpleGrantedAuthority(user.get_id()));
+
+            return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), listAuth);
+        } else {
+
+            StaffModel staff = staffsRepository.getStaffModelByEmail(email[0]);
+
+            if(staff == null) {
+
+                throw new UsernameNotFoundException("user not found");
+            }
+
+            List<GrantedAuthority> listAuth = new LinkedList<>();
+
+            listAuth.add(new SimpleGrantedAuthority(staff.getRole()));
+            listAuth.add(new SimpleGrantedAuthority(staff.get_id()));
+
+            return new org.springframework.security.core.userdetails.User(staff.getEmail(), staff.getPassword(), listAuth);
         }
-
-        List<GrantedAuthority> listAuth = new LinkedList<>();
-
-        listAuth.add(new SimpleGrantedAuthority(user.getRole()));
-        listAuth.add(new SimpleGrantedAuthority(user.get_id()));
-
-        return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), listAuth);
     }
 }
