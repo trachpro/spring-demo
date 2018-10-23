@@ -23,6 +23,7 @@ import java.util.List;
 public class User  extends ResourceSupport{
 
     @Id
+    @Field("_id")
     private String _id;
 
     @Field("name")
@@ -46,9 +47,9 @@ public class User  extends ResourceSupport{
     @Field("isConfirmed")
     private Boolean isConfirmed;
 
-    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @JoinProperty(name = "user_id")
-    private List<Reservation> reservations = new ArrayList<>();
+//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
+    @Field("reservations")
+    private List<Reservation> reservations;
 
 
     public User(){}

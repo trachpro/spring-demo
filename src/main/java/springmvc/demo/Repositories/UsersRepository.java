@@ -9,7 +9,7 @@ import springmvc.demo.models.User;
 @EnableRelMongo
 @Repository
 @Transactional
-public interface UsersRepository extends MongoRepository<User, String> {
+public interface UsersRepository extends MongoRepository<User, String>, UsersRepositoryCustom {
 //    public void deleteByName
     public User findUserByEmail(String email);
     public User findUserBy_id(String id);

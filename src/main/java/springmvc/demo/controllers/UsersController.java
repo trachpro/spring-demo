@@ -3,6 +3,7 @@ package springmvc.demo.controllers;
 
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.hateoas.Link;
 import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
@@ -192,5 +193,12 @@ public class UsersController {
             resp.put("error", e);
             return new ResponseEntity<>(resp.toString(), HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    @GetMapping("/detail")
+    public ResponseEntity<String> getUserWithDetail() {
+
+        JSONObject resp = Converts.convertModelToJson(usersRepository.findUserAttachingReservation(PageRequest.of(0,10)));
+        return new ResponseEntity<>(resp.toString(), HttpStatus.OK);
     }
 }

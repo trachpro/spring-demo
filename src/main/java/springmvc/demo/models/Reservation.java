@@ -20,10 +20,13 @@ public class Reservation {
     @Field("user_id")
     private String user_id;
 
-
-//    private User owner;
-
     public Reservation() {}
+
+    public Reservation(String _id, String user_id){
+
+        this._id = _id;
+        this.user_id = user_id;
+    }
 
     @JsonProperty("_id")
     public String get_id() {
