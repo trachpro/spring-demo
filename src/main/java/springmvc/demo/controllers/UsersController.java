@@ -4,8 +4,6 @@ package springmvc.demo.controllers;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
-import org.springframework.hateoas.Link;
-import org.springframework.hateoas.Resource;
 import org.springframework.hateoas.Resources;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpEntity;
@@ -15,16 +13,13 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.Repositories.UsersRepository;
-import springmvc.demo.models.ErrorModel;
 import springmvc.demo.models.User;
 import springmvc.demo.utils.Commons;
 import springmvc.demo.utils.Converts;
 
 import static org.springframework.hateoas.mvc.ControllerLinkBuilder.linkTo;
 
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 
 @RestController
 @RequestMapping("api/users")

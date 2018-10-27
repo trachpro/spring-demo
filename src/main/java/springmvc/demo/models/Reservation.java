@@ -6,43 +6,122 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
+import org.springframework.format.annotation.DateTimeFormat;
 
-//import javax.persistence.ManyToOne;
+import java.util.Date;
+
 
 @Document(collection = "Reservations")
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Reservation {
 
     @Id
+    @Field("_id")
     private String _id;
 
-//    @ManyToOne(mappedBy = "reservations")
-    @Field("user_id")
-    private String user_id;
+    @Field("bookingFrom")
+    private Date bookingFrom;
 
-    public Reservation() {}
+    @Field("bookingTo")
+    private Date bookingTo;
 
-    public Reservation(String _id, String user_id){
+    @Field("customerEmail")
+    private String customerEmail;
 
-        this._id = _id;
-        this.user_id = user_id;
+    @Field("roomNo")
+    private String roomNo;
+
+    @Field("checkin")
+    private DateTimeFormat checkin;
+
+    @Field("checkout")
+    private DateTimeFormat checkout;
+
+    @Field("status")
+    private String status;
+
+    @Field("total")
+    private int total;
+
+    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String roomNo, DateTimeFormat checkin, DateTimeFormat checkout, String status) {
+        this.bookingFrom = bookingFrom;
+        this.bookingTo = bookingTo;
+        this.customerEmail = customerEmail;
+        this.roomNo = roomNo;
+        this.checkin = checkin;
+        this.checkout = checkout;
+        this.status = status;
     }
 
-    @JsonProperty("_id")
-    public String get_id() {
-        return _id;
+    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String roomNo, String status) {
+        this.bookingFrom = bookingFrom;
+        this.bookingTo = bookingTo;
+        this.customerEmail = customerEmail;
+        this.roomNo = roomNo;
+        this.status = status;
     }
 
-    public void set_id(String _id) {
-        this._id = _id;
+    public Date getBookingFrom() {
+        return bookingFrom;
     }
 
-    @JsonProperty("user_id")
-    public String getUserId() {
-        return user_id;
+    public void setBookingFrom(Date bookingFrom) {
+        this.bookingFrom = bookingFrom;
     }
 
-    public void setUserId(String user_id) {
-        this.user_id = user_id;
+    public Date getBookingTo() {
+        return bookingTo;
+    }
+
+    public void setBookingTo(Date bookingTo) {
+        this.bookingTo = bookingTo;
+    }
+
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
+    public String getRoomNo() {
+        return roomNo;
+    }
+
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo;
+    }
+
+    public DateTimeFormat getCheckin() {
+        return checkin;
+    }
+
+    public void setCheckin(DateTimeFormat checkin) {
+        this.checkin = checkin;
+    }
+
+    public DateTimeFormat getCheckout() {
+        return checkout;
+    }
+
+    public void setCheckout(DateTimeFormat checkout) {
+        this.checkout = checkout;
+    }
+
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
+    public int getTotal() {
+        return total;
+    }
+
+    public void setTotal(int total) {
+        this.total = total;
     }
 }
