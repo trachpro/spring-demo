@@ -1,4 +1,4 @@
-package springmvc.demo.models.Room;
+package springmvc.demo.models;
 
 import org.json.JSONObject;
 import org.springframework.data.annotation.Id;
@@ -28,6 +28,9 @@ public class Room {
 
     @Field(value = "beds")
     private Map<String, Integer> beds;
+
+    @Field(value="roomNo")
+    private String roomNo;
 
     public Room() {}
 
@@ -77,5 +80,13 @@ public class Room {
 
     public void setBeds(Map beds) {
         this.beds = beds;
+    }
+
+    public String getRoomNo() {
+        return roomNo;
+    }
+
+    public void setRoomNo(String roomNo) {
+        this.roomNo = roomNo;
     }
 }

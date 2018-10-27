@@ -1,13 +1,12 @@
 package springmvc.demo.controllers;
 
-import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.Repositories.RoomsRepository;
-import springmvc.demo.models.Room.Room;
+import springmvc.demo.models.Room;
 import springmvc.demo.utils.Converts;
 
 import java.util.HashMap;

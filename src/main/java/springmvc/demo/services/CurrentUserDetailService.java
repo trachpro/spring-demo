@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springmvc.demo.Repositories.StaffsRepository;
 import springmvc.demo.Repositories.UsersRepository;
-import springmvc.demo.models.StaffModel;
+import springmvc.demo.models.Staff;
 import springmvc.demo.models.User;
 
 import java.util.*;
@@ -47,7 +47,7 @@ public class CurrentUserDetailService implements UserDetailsService {
             return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), listAuth);
         } else {
 
-            StaffModel staff = staffsRepository.getStaffModelByEmail(email[0]);
+            Staff staff = staffsRepository.getStaffModelByEmail(email[0]);
 
             if(staff == null) {
 

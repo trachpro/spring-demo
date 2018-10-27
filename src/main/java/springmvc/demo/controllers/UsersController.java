@@ -58,24 +58,22 @@ public class UsersController {
         String name = pet.get("name");
         String email = pet.get("email");
         String password = pet.get("password");
-        String role = Commons.isManager()? pet.get("role"): "ROLE_CUSTOMER";
-        String address = pet.get("address");
+//        String role = Commons.isManager()? pet.get("role"): "ROLE_CUSTOMER";
 
 
         JSONObject resp = new JSONObject();
 
-        if(role == null || role == "") {
-            resp.put("message", "role is required!");
-            return new ResponseEntity<>(resp.toString(), HttpStatus.BAD_REQUEST);
-        }
+//        if(role == null || role == "") {
+//            resp.put("message", "role is required!");
+//            return new ResponseEntity<>(resp.toString(), HttpStatus.BAD_REQUEST);
+//        }
         if(usersRepository.findUserByEmail(email) == null) {
 
             try {
 
-                User a = usersRepository.insert(new User(name, passwordEncoder.encode(password), email, role, address));
+                User a = usersRepository.insert(new User(name, passwordEncoder.encode(password), email));
                 resp = Converts.convertModelToJson(a);
                 resp.remove("password");
-                resp.remove("isConfirmed");
                 return new ResponseEntity<>(resp.toString(), HttpStatus.ACCEPTED);
             } catch (Exception e) {
 
@@ -138,30 +136,21 @@ public class UsersController {
 
                 case "password":
                     user.setPassword(passwordEncoder.encode(entry.getValue()));
-                    user.setConfirmed(true);
                     break;
 
-                case "profilImg":
-                    user.setProfileImg(entry.getValue());
-                    break;
-
-                case "address":
-                    user.setAddress(entry.getValue());
-                    break;
-
-                case "role":
-                    if(!Commons.isManager()) {
-                        resp.put("message", "you are not allowed to change your role!");
-                        return new ResponseEntity<>(resp.toString(), HttpStatus.BAD_REQUEST);
-                    }
-                    if(!Commons.isValidRole(entry.getValue())) {
-                        resp.put("message", "Invalid ROLE Format!");
-                        return new ResponseEntity<>(resp.toString(), HttpStatus.BAD_REQUEST);
-                    }
-                    user.setRole(entry.getValue());
-                    break;
-
-                    default: break;
+//                case "role":
+//                    if(!Commons.isManager()) {
+//                        resp.put("message", "you are not allowed to change your role!");
+//                        return new ResponseEntity<>(resp.toString(), HttpStatus.BAD_REQUEST);
+//                    }
+//                    if(!Commons.isValidRole(entry.getValue())) {
+//                        resp.put("message", "Invalid ROLE Format!");
+//                        return new ResponseEntity<>(resp.toString(), HttpStatus.BAD_REQUEST);
+//                    }
+//                    user.setRole(entry.getValue());
+//                    break;
+//
+//                    default: break;
             }
         }
 

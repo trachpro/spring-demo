@@ -9,7 +9,7 @@ import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import springmvc.demo.Repositories.StaffsRepository;
-import springmvc.demo.models.StaffModel;
+import springmvc.demo.models.Staff;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -28,7 +28,7 @@ public class StaffUserDetailService implements UserDetailsService {
 
         System.out.println("staff running");
 
-        StaffModel staff = staffsRepository.getStaffModelByEmail(s);
+        Staff staff = staffsRepository.getStaffModelByEmail(s);
 
         if(staff == null) {
 
