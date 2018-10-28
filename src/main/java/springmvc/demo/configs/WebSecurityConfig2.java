@@ -14,7 +14,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import springmvc.demo.Hooks.JWTAuthenticationFilter;
 import springmvc.demo.Hooks.JWTCustomLoginFilter;
-import springmvc.demo.services.StaffUserDetailService;
+import springmvc.demo.services.authentication.StaffUserDetailService;
 
 
 @EnableWebSecurity

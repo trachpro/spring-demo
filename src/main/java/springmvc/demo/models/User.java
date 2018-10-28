@@ -22,11 +22,6 @@ import java.util.List;
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
 public class User  extends Person {
 
-//    @OneToMany(fetch = FetchType.EAGER, cascade = CascadeType.PERSIST)
-    @Field("reservations")
-    private List<Reservation> reservations;
-
-
     public User(){}
 
     public User(String name, String email) {
@@ -35,15 +30,5 @@ public class User  extends Person {
 
     public User(String name, String password, String email){
         super(name, password, email);
-    }
-
-
-    public List<Reservation> getReservations() {
-        return reservations;
-    }
-
-    public void setReservations(List<Reservation> reservations) {
-
-        this.reservations = reservations;
     }
 }

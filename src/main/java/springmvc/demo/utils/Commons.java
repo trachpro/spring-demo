@@ -1,10 +1,23 @@
 package springmvc.demo.utils;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import springmvc.demo.models.User;
+
+import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public class Commons {
 
     private static final String[] ROLES = {"ROLE_MANAGER", "ROLE_STAFF", "ROLE_CUSTOMER"};
+
+    private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
+            Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    @Autowired
+    private static PasswordEncoder passwordEncoder;
 
     public static boolean isManager() {
 
@@ -58,5 +71,27 @@ public class Commons {
         }
 
         return false;
+    }
+
+    public static User getUserFromParams(Map<String, String> params) {
+
+        String name = params.get("name");
+        String email = params.get("email");
+        String password = params.get("password");
+
+        if(name == null || name == "" ||
+                email == null || email == "" || !validateEmail(email) ||
+                params == null || password == ""
+                ) {
+
+            return null;
+        }
+
+        return new User( name, passwordEncoder.encode(password), email );
+    }
+
+    public static boolean validateEmail(String emailStr) {
+        Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
+        return matcher.find();
     }
 }

@@ -3,7 +3,7 @@ package springmvc.demo.Hooks;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.filter.GenericFilterBean;
-import springmvc.demo.services.TokenAuthenticationService;
+import springmvc.demo.services.authentication.TokenAuthenticationService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;

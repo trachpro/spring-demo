@@ -1,14 +1,12 @@
 package springmvc.demo.models;
 
-import org.json.JSONObject;
-
 public class SuccessResponse {
 
     private String message;
 
-    private JSONObject data;
+    private Object data;
 
-    public SuccessResponse(String message, JSONObject data) {
+    public SuccessResponse(String message, Object data) {
         this.message = message;
         this.data = data;
     }
@@ -21,11 +19,11 @@ public class SuccessResponse {
         this.message = message;
     }
 
-    public JSONObject getData() {
+    public Object getData() {
         return data;
     }
 
-    public void setData(JSONObject data) {
+    public void setData(Object data) {
         this.data = data;
     }
 }

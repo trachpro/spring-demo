@@ -1,4 +1,4 @@
-package springmvc.demo.services;
+package springmvc.demo.services.authentication;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -36,11 +36,19 @@ public class TokenAuthenticationService {
     public static String generateJWT(Authentication auth) {
 
         String id = auth.getAuthorities().toArray()[0].toString();
+        System.out.println(auth.getAuthorities().toArray()[1]);
         String email = auth.getName();
+
+        Map<String, Object> hashmap = new HashMap<>();
+
+        hashmap.put("role", auth.getAuthorities().toArray()[1].toString());
+        hashmap.put("email", email);
+        hashmap.put("id", id);
 
         return Jwts.builder()
                 .setSubject(email)
                 .setId(id)
+                .setClaims(hashmap)
                 .setExpiration(new Date(System.currentTimeMillis() + Constants.EXPIRATIONTIME))
                 .signWith(SignatureAlgorithm.HS512, Constants.SECRET)
                 .compact();
@@ -55,7 +63,7 @@ public class TokenAuthenticationService {
                     .getBody();
 
             List<GrantedAuthority> listAuth = new LinkedList<>();
-            listAuth.add(new SimpleGrantedAuthority(user.getId()));
+            listAuth.add(new SimpleGrantedAuthority(user.get("role").toString()));
             return user != null? new UsernamePasswordAuthenticationToken(user.getId(), null, listAuth ): null;
         }
 

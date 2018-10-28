@@ -8,7 +8,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 import springmvc.demo.models.User;
-import springmvc.demo.services.TokenAuthenticationService;
+import springmvc.demo.services.authentication.TokenAuthenticationService;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
