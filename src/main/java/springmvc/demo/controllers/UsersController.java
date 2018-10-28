@@ -31,7 +31,7 @@ public class UsersController {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    private UsersService usersService = new UsersService(usersRepository, passwordEncoder);
+//    private UsersService usersService = new UsersService(usersRepository, passwordEncoder);
 
 
     @RequestMapping(method = RequestMethod.GET, produces = {"application/hal+json"})
@@ -47,11 +47,10 @@ public class UsersController {
         User user = Commons.getUserFromParams(pet);
 
         if(user == null) {
-
             return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
         }
 
-        return usersService.registerNewUser(user);
+        return UsersService.registerNewUser(user);
     }
 
     @GetMapping("/{id}")
@@ -62,7 +61,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return usersService.getUserById(id);
+        return UsersService.getUserById(id);
     }
 
     @PutMapping("/{id}")
@@ -73,7 +72,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return usersService.updateUserById(id, params);
+        return UsersService.updateUserById(id, params);
     }
 
     @DeleteMapping("/{id}")
@@ -87,7 +86,7 @@ public class UsersController {
             return Response.getErrorMessage("You don't have authorization to do this action!", HttpStatus.FORBIDDEN);
         }
 
-        return usersService.deleteUserById(id);
+        return UsersService.deleteUserById(id);
     }
 
 //    @GetMapping("/detail")

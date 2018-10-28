@@ -2,6 +2,7 @@ package springmvc.demo.utils;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import springmvc.demo.models.User;
 
@@ -17,7 +18,7 @@ public class Commons {
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
     @Autowired
-    private static PasswordEncoder passwordEncoder;
+    private static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     public static boolean isManager() {
 
@@ -83,7 +84,6 @@ public class Commons {
                 email == null || email == "" || !validateEmail(email) ||
                 params == null || password == ""
                 ) {
-
             return null;
         }
 
