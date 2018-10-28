@@ -22,12 +22,10 @@ public class UsersService {
     @Autowired
     private static PasswordEncoder passwordEncoder;
 
-    public static void setUsersRepository(UsersRepository usersRepository) {
-        UsersService.usersRepository = usersRepository;
-    }
+    public UsersService(UsersRepository repo, PasswordEncoder encoder) {
 
-    public static void setPasswordEncoder(PasswordEncoder passwordEncoder) {
-        UsersService.passwordEncoder = passwordEncoder;
+        usersRepository = repo;
+        passwordEncoder = encoder;
     }
 
     public static ResponseEntity<String> registerNewUser(User user) {

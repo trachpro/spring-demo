@@ -8,6 +8,7 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.Repositories.UsersRepository;
 import springmvc.demo.models.User;
@@ -27,10 +28,11 @@ public class UsersController {
     @Autowired
     private UsersRepository usersRepository;
 
-    public void setUsersRepository(UsersRepository user) {
+    @Autowired
+    private PasswordEncoder passwordEncoder;
 
-        usersRepository = user;
-    }
+    private UsersService usersService = new UsersService(usersRepository, passwordEncoder);
+
 
     @RequestMapping(method = RequestMethod.GET, produces = {"application/hal+json"})
     HttpEntity<Resources<User>> getList() {
@@ -49,7 +51,7 @@ public class UsersController {
             return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
         }
 
-        return UsersService.registerNewUser(user);
+        return usersService.registerNewUser(user);
     }
 
     @GetMapping("/{id}")
@@ -60,7 +62,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.getUserById(id);
+        return usersService.getUserById(id);
     }
 
     @PutMapping("/{id}")
@@ -71,7 +73,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.updateUserById(id, params);
+        return usersService.updateUserById(id, params);
     }
 
     @DeleteMapping("/{id}")
@@ -85,7 +87,7 @@ public class UsersController {
             return Response.getErrorMessage("You don't have authorization to do this action!", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.deleteUserById(id);
+        return usersService.deleteUserById(id);
     }
 
 //    @GetMapping("/detail")
