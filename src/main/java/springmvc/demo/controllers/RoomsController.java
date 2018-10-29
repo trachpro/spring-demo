@@ -5,8 +5,9 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springmvc.demo.Repositories.RoomsRepository;
+import springmvc.demo.Repositories.rooms.RoomsRepository;
 import springmvc.demo.models.Room;
+import springmvc.demo.services.RoomService;
 import springmvc.demo.utils.Converts;
 
 import java.util.HashMap;
@@ -57,5 +58,12 @@ public class RoomsController {
     public List<Room> getRoomList() {
 
         return roomsRepository.findAll();
+    }
+
+    @GetMapping({"/{capacity}/{from}/{to}"})
+    public ResponseEntity<String> checkAvailableRooms(@PathVariable String capacity, @PathVariable String from, @PathVariable String to) {
+        int nCapacity = Integer.parseInt(capacity);
+
+        return RoomService.findAvailableRoom(nCapacity, from, to).toResponse();
     }
 }
