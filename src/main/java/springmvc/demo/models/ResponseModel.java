@@ -48,8 +48,9 @@ public class ResponseModel {
 
     public ResponseEntity<String> toResponse() {
 
-        JSONObject result = Converts.convertModelToJson(data);
-        result.put("message", message);
+        JSONObject result = Converts.convertModelToJson(this);
+
+        result.remove("status");
 
         return new ResponseEntity<>(result.toString(),status);
     }
