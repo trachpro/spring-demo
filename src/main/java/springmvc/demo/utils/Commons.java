@@ -6,6 +6,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import springmvc.demo.models.Staff;
 import springmvc.demo.models.User;
+import springmvc.demo.services.authentication.UserCustom;
 
 import java.util.Map;
 import java.util.regex.Matcher;
@@ -52,6 +53,13 @@ public class Commons {
                 .toArray()[0]
                 .toString()
                 .equals("ROLE_CUSTOMER");
+    }
+
+    public static String getEmail() {
+
+        UserCustom user = (UserCustom) SecurityContextHolder.getContext().getAuthentication();
+
+        return user.getEmail();
     }
 
     public static boolean isOwner(String id) {

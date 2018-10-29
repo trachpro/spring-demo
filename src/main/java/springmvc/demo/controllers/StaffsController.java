@@ -20,6 +20,8 @@ public class StaffsController {
     @RequestMapping(method = RequestMethod.GET, produces = {"application/hal+json"})
     ResponseEntity<String> getListStaffs() {
 
+        System.out.println(Commons.getEmail());
+
         return StaffsService.getAllStaffs().toResponse();
     }
 

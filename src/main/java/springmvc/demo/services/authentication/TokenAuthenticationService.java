@@ -64,7 +64,7 @@ public class TokenAuthenticationService {
 
             List<GrantedAuthority> listAuth = new LinkedList<>();
             listAuth.add(new SimpleGrantedAuthority(user.get("role").toString()));
-            return user != null? new UsernamePasswordAuthenticationToken(user.getId(), null, listAuth ): null;
+            return user != null? new UserCustom(user.getId(), null, listAuth,  user.get("email").toString() ): null;
         }
 
         return null;
