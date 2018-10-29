@@ -12,6 +12,13 @@ public class Staff extends Person {
 
     public Staff(){}
 
+    public Staff(String name, String password, String email, String role) {
+
+        super(name, password, email);
+
+        this.role = role;
+    }
+
     public String getRole() {
         return role;
     }

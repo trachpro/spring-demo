@@ -1,39 +1,38 @@
 package springmvc.demo.controllers;
 
-
 import org.json.JSONObject;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springmvc.demo.models.User;
+import springmvc.demo.models.Staff;
 import springmvc.demo.utils.Commons;
 import springmvc.demo.utils.Response;
-import springmvc.demo.services.UsersService;
+import springmvc.demo.services.StaffsService;
 
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping("api/staffs")
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
-public class UsersController {
+public class StaffsController {
 
     @RequestMapping(method = RequestMethod.GET, produces = {"application/hal+json"})
-    public ResponseEntity<String> getList() {
+    ResponseEntity<String> getListStaffs() {
 
-        return UsersService.getAllUsers().toResponse();
+        return StaffsService.getAllStaffs().toResponse();
     }
 
     @PostMapping(produces = {"application/hal+json"})
-    public @ResponseBody ResponseEntity<String> createUser(@RequestBody Map<String, String> pet) {
+    public @ResponseBody ResponseEntity<String> createStaff(@RequestBody Map<String, String> pet) {
 
-        User user = Commons.getUserFromParams(pet);
+        Staff user = Commons.getStaffFromParams(pet);
 
         if(user == null) {
             return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
         }
 
-        return UsersService.registerNewUser(user).toResponse();
+        return StaffsService.registerNewStaff(user).toResponse();
     }
 
     @GetMapping("/{id}")
@@ -44,7 +43,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.getUserById(id).toResponse();
+        return StaffsService.getStaffById(id).toResponse();
     }
 
     @PutMapping("/{id}")
@@ -55,7 +54,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.updateUserById(id, params).toResponse();
+        return StaffsService.updateStaffById(id, params).toResponse();
     }
 
     @DeleteMapping("/{id}")
@@ -69,6 +68,6 @@ public class UsersController {
             return Response.getErrorMessage("You don't have authorization to do this action!", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.deleteUserById(id).toResponse();
+        return StaffsService.deleteStaffById(id).toResponse();
     }
 }

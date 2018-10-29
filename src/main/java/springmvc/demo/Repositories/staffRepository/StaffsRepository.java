@@ -1,4 +1,4 @@
-package springmvc.demo.Repositories;
+package springmvc.demo.Repositories.staffRepository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
@@ -10,4 +10,10 @@ import springmvc.demo.models.Staff;
 public interface StaffsRepository extends MongoRepository<Staff, String> {
 
     public Staff getStaffModelByEmail(String email);
+
+    public Staff findStaffByEmail(String email);
+
+    public Staff findStaffBy_id(String id);
+
+    public Long deleteStaffBy_id(String id);
 }

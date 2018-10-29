@@ -1,4 +1,4 @@
-package springmvc.demo.Repositories;
+package springmvc.demo.Repositories.users;
 
 import io.github.kaiso.relmongo.config.EnableRelMongo;
 import org.springframework.data.mongodb.repository.MongoRepository;

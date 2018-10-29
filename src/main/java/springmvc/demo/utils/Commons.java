@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import springmvc.demo.models.Staff;
 import springmvc.demo.models.User;
 
 import java.util.Map;
@@ -88,6 +89,24 @@ public class Commons {
         }
 
         return new User( name, passwordEncoder.encode(password), email );
+    }
+
+    public static Staff getStaffFromParams(Map<String, String> params) {
+
+        String name = params.get("name");
+        String email = params.get("email");
+        String password = params.get("password");
+        String role = params.get("role");
+
+        if(name == null || name == "" ||
+                email == null || email == "" || !validateEmail(email) ||
+                params == null || password == "" ||
+                role == null || role == ""
+                ) {
+            return null;
+        }
+
+        return new Staff( name, passwordEncoder.encode(password), email, role );
     }
 
     public static boolean validateEmail(String emailStr) {

@@ -1,11 +1,10 @@
 package springmvc.demo.services;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
-import springmvc.demo.Repositories.UsersRepository;
+import springmvc.demo.Repositories.users.UsersRepository;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.User;
 
@@ -15,16 +14,24 @@ import java.util.Map;
 @RestController
 public class UsersService {
 
-    @Autowired
     private static UsersRepository usersRepository;
 
-    @Autowired
     private static PasswordEncoder passwordEncoder;
 
     public UsersService(UsersRepository repo, PasswordEncoder encoder) {
 
         usersRepository = repo;
         passwordEncoder = encoder;
+    }
+
+    public static ResponseModel getAllUsers() {
+
+        try {
+            return new ResponseModel(usersRepository.findAll(),"successfull", HttpStatus.OK);
+        } catch (Exception e) {
+
+            return new ResponseModel(null, "internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     public static ResponseModel registerNewUser(User user) {
