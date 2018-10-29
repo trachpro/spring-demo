@@ -30,7 +30,7 @@ public class Room {
     private Map<String, Integer> beds;
 
     @Field(value="roomNo")
-    private String roomNo;
+    private int roomNo;
 
     public Room() {}
 
@@ -82,11 +82,11 @@ public class Room {
         this.beds = beds;
     }
 
-    public String getRoomNo() {
+    public int getRoomNo() {
         return roomNo;
     }
 
-    public void setRoomNo(String roomNo) {
+    public void setRoomNo(int roomNo) {
         this.roomNo = roomNo;
     }
 }

@@ -29,7 +29,7 @@ public class Reservation {
     private String customerEmail;
 
     @Field("roomNo")
-    private String roomNo;
+    private int roomNo;
 
     @Field("checkin")
     private DateTimeFormat checkin;
@@ -43,7 +43,7 @@ public class Reservation {
     @Field("total")
     private int total;
 
-    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String roomNo, DateTimeFormat checkin, DateTimeFormat checkout, String status) {
+    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, int roomNo, DateTimeFormat checkin, DateTimeFormat checkout, String status) {
         this.bookingFrom = bookingFrom;
         this.bookingTo = bookingTo;
         this.customerEmail = customerEmail;
@@ -53,12 +53,15 @@ public class Reservation {
         this.status = status;
     }
 
-    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String roomNo, String status) {
+    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, int roomNo, String status) {
         this.bookingFrom = bookingFrom;
         this.bookingTo = bookingTo;
         this.customerEmail = customerEmail;
         this.roomNo = roomNo;
         this.status = status;
+    }
+
+    public Reservation() {
     }
 
     public Date getBookingFrom() {
@@ -85,11 +88,11 @@ public class Reservation {
         this.customerEmail = customerEmail;
     }
 
-    public String getRoomNo() {
+    public int getRoomNo() {
         return roomNo;
     }
 
-    public void setRoomNo(String roomNo) {
+    public void setRoomNo(int roomNo) {
         this.roomNo = roomNo;
     }
 

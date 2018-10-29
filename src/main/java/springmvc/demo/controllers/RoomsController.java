@@ -63,7 +63,7 @@ public class RoomsController {
     @GetMapping({"/{capacity}/{from}/{to}"})
     public ResponseEntity<String> checkAvailableRooms(@PathVariable String capacity, @PathVariable String from, @PathVariable String to) {
         int nCapacity = Integer.parseInt(capacity);
-
+        
         return RoomService.findAvailableRoom(nCapacity, from, to).toResponse();
     }
 }

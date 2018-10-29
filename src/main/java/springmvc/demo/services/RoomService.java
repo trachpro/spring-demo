@@ -12,9 +12,11 @@ import springmvc.demo.models.Room;
 import springmvc.demo.models.Rooms;
 import springmvc.demo.utils.Converts;
 
+import java.lang.reflect.Array;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.Iterator;
 import java.util.List;
 
 @Service
@@ -28,31 +30,49 @@ public class RoomService {
         this.roomsRepository = roomsRepository;
     }
 
+
+    /**
+     *  find available room to be reserved between 2 days, and capacity
+     *  @param capacity number of stayers
+     *  @param sFrom check in day;
+     *  @param sTo check out day;
+     *  @return ResponseModel
+     */
     public static ResponseModel findAvailableRoom(int capacity, String sFrom, String sTo) {
 
 
         try {
-            Date from = Converts.convertStringToDate(sFrom);
+            Date from = Converts.convertStringToDate(sFrom);  // convert input string to date
             Date to = Converts.convertStringToDate(sTo);
 
             if(capacity <= 0 || to.before(from)) {
                 return new ResponseModel(JSONObject.NULL,"Invalid input", HttpStatus.BAD_REQUEST);
             }
 
+            // list of rooms matching by number of stayers
             List<Room> rooms = roomsRepository.findRoomsByCapacity(capacity);
 
+            // list of reservations between 2 days
             List<Reservation> reservations = ReservationService.findReservationBetweenDate(from, to);
-            System.out.println("Size = " + reservations.size());
-            for (Room r: rooms
+
+            List<Integer> reservedRooms = new ArrayList<Integer>();
+
+
+
+            for (Reservation r: reservations
                  ) {
-                System.out.println( "Room Number: " + r.getRoomNo());
+                System.out.println("RoomNo : " + r.getRoomNo());
+                reservedRooms.add(r.getRoomNo());
             }
 
-            for (Reservation re: reservations
-                 ) {
-                System.out.println("Reservation : "+re.getRoomNo());
+            // filter available room to be reserved
+            Iterator<Room> it = rooms.iterator();
+            while (it.hasNext()) {
+                Room r = it.next();
+                if(reservedRooms.contains(r.getRoomNo())) {
+                    it.remove();
+                }
             }
-
 
             return new ResponseModel(new Rooms(rooms), "Success", HttpStatus.OK);
 

@@ -34,9 +34,7 @@ public class ReservationsRepositoryImpl implements ReservationsRepositoryCustom 
 
         query.addCriteria(criteria);
 
-        System.out.println("Query = " + query);
-
-        List<Reservation> reservations = mongoTemplate.find(query, Reservation.class);
+        List<Reservation> reservations = mongoTemplate.find(query, Reservation.class, "reservations");
 
         return reservations;
     }
