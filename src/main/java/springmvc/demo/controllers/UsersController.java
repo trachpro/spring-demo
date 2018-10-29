@@ -50,7 +50,7 @@ public class UsersController {
             return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
         }
 
-        return UsersService.registerNewUser(user);
+        return UsersService.registerNewUser(user).toResponse();
     }
 
     @GetMapping("/{id}")
@@ -61,7 +61,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.getUserById(id);
+        return UsersService.getUserById(id).toResponse();
     }
 
     @PutMapping("/{id}")
@@ -72,7 +72,7 @@ public class UsersController {
             return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.updateUserById(id, params);
+        return UsersService.updateUserById(id, params).toResponse();
     }
 
     @DeleteMapping("/{id}")
@@ -86,7 +86,7 @@ public class UsersController {
             return Response.getErrorMessage("You don't have authorization to do this action!", HttpStatus.FORBIDDEN);
         }
 
-        return UsersService.deleteUserById(id);
+        return UsersService.deleteUserById(id).toResponse();
     }
 
 //    @GetMapping("/detail")

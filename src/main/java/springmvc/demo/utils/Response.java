@@ -14,10 +14,20 @@ public class Response {
         return new ResponseEntity<>(Converts.convertModelToJson(successResponse).toString(), status);
     }
 
+    public static ResponseEntity<String> getSuccessObject(SuccessResponse successResponse, HttpStatus status) {
+
+        return new ResponseEntity<>(Converts.convertModelToJson(successResponse).toString(), status);
+    }
+
 
     public static ResponseEntity<String> getErrorMessage(String message, HttpStatus status) {
 
         ErrorResponse errorResponse = new ErrorResponse(message);
+
+        return new ResponseEntity<>(Converts.convertModelToJson(errorResponse).toString(), status);
+    }
+
+    public static ResponseEntity<String> getErrorObject(ErrorResponse errorResponse, HttpStatus status) {
 
         return new ResponseEntity<>(Converts.convertModelToJson(errorResponse).toString(), status);
     }
