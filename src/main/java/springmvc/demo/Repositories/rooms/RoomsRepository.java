@@ -12,4 +12,5 @@ import java.util.List;
 @Transactional
 public interface RoomsRepository extends MongoRepository<Room, String> {
     public List<Room> findRoomsByCapacity(int capacity);
+    public Room findRoomsByRoomNo(int roomNo);
 }

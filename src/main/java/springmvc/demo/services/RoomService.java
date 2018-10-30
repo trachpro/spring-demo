@@ -78,8 +78,25 @@ public class RoomService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel(null,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
+    }
+
+    public static Room findRoomByRoomNo(int roomNo) {
+        return roomsRepository.findRoomsByRoomNo(roomNo);
+    }
+
+    public static Boolean checkRoomAvailibilityBetweenDate(int roomNo, Date from, Date to) {
+        List<Reservation> reservations = ReservationService.findReservationBetweenDate(from, to);
+
+        for (Reservation r: reservations
+                ) {
+            if(r.getRoomNo() == roomNo) {
+                return false;
+            }
+        }
+
+        return true;
     }
 }

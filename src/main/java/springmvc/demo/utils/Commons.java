@@ -4,11 +4,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import springmvc.demo.models.Reservation;
 import springmvc.demo.models.Staff;
 import springmvc.demo.models.User;
 import springmvc.demo.services.authentication.UserCustom;
 
+import java.security.SecureRandom;
+import java.util.Date;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -52,7 +56,7 @@ public class Commons {
                 .getAuthorities()
                 .toArray()[0]
                 .toString()
-                .equals("ROLE_CUSTOMER");
+                .equals("ROLE_CLIENT");
     }
 
     public static String getEmail() {
@@ -120,5 +124,46 @@ public class Commons {
     public static boolean validateEmail(String emailStr) {
         Matcher matcher = VALID_EMAIL_ADDRESS_REGEX .matcher(emailStr);
         return matcher.find();
+    }
+
+    public static Reservation getReservationFromParams(Map<String, String> params) {
+
+        Date from = Converts.convertStringToDate(params.get("from"));
+        Date to = Converts.convertStringToDate(params.get("to"));
+        String name = params.get("name");
+
+        int roomNo = Integer.parseInt(params.get("room"));
+
+        if(from == null || to == null || name == null || name.length() == 0 || roomNo <= 0) {
+            return null;
+        }
+
+        return new Reservation(from, to, name, roomNo);
+    }
+
+    public static String generateRandomString() {
+
+        String prefix = "BK";
+
+        String validChar = "0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ";
+        SecureRandom rnd = new SecureRandom();
+        int len = 7;
+
+        StringBuilder sb = new StringBuilder( len );
+            for( int i = 0; i < len; i++ )
+                sb.append( validChar.charAt( rnd.nextInt(validChar.length()) ) );
+
+        String surfix = sb.toString();
+
+        return prefix + surfix;
+    }
+
+    public static long calculateDayDifference(Date from, Date to) {
+        long diff = Math.abs(to.getTime() - from.getTime());
+        long daydiff = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
+
+        if (daydiff == 0) return 1;
+
+        return daydiff;
     }
 }

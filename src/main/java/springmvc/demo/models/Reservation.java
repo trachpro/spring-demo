@@ -11,13 +11,16 @@ import org.springframework.format.annotation.DateTimeFormat;
 import java.util.Date;
 
 
-@Document(collection = "Reservations")
+@Document(collection = "reservations")
 @JsonAutoDetect(getterVisibility = JsonAutoDetect.Visibility.NONE)
 public class Reservation {
 
     @Id
     @Field("_id")
     private String _id;
+
+    @Field("code")
+    private String code;
 
     @Field("bookingFrom")
     private Date bookingFrom;
@@ -27,6 +30,9 @@ public class Reservation {
 
     @Field("customerEmail")
     private String customerEmail;
+
+    @Field("customerName")
+    private String customerName;
 
     @Field("roomNo")
     private int roomNo;
@@ -43,25 +49,51 @@ public class Reservation {
     @Field("total")
     private int total;
 
-    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, int roomNo, DateTimeFormat checkin, DateTimeFormat checkout, String status) {
+    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String customerName , int roomNo, DateTimeFormat checkin, DateTimeFormat checkout, String status) {
         this.bookingFrom = bookingFrom;
         this.bookingTo = bookingTo;
         this.customerEmail = customerEmail;
+        this.customerName = customerName;
         this.roomNo = roomNo;
         this.checkin = checkin;
         this.checkout = checkout;
         this.status = status;
     }
 
-    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, int roomNo, String status) {
+    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String customerName,int roomNo, String status) {
         this.bookingFrom = bookingFrom;
         this.bookingTo = bookingTo;
         this.customerEmail = customerEmail;
+        this.customerName = customerName;
         this.roomNo = roomNo;
         this.status = status;
     }
 
+    public Reservation(Date bookingFrom, Date bookingTo, String customerName, int roomNo, String status, int total) {
+        this.bookingFrom = bookingFrom;
+        this.bookingTo = bookingTo;
+        this.customerName = customerName;
+        this.roomNo = roomNo;
+        this.status = status;
+        this.total = total;
+    }
+
+    public Reservation(Date bookingFrom, Date bookingTo, String name, int roomNo) {
+        this.bookingFrom = bookingFrom;
+        this.bookingTo = bookingTo;
+        this.customerName = name;
+        this.roomNo = roomNo;
+    }
+
     public Reservation() {
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public Date getBookingFrom() {
@@ -86,6 +118,14 @@ public class Reservation {
 
     public void setCustomerEmail(String customerEmail) {
         this.customerEmail = customerEmail;
+    }
+
+    public String getCustomerName() {
+        return customerName;
+    }
+
+    public void setCustomerName(String customerName) {
+        this.customerName = customerName;
     }
 
     public int getRoomNo() {

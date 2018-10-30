@@ -10,5 +10,6 @@ import springmvc.demo.models.Reservation;
 public interface ReservationsRepository extends MongoRepository<Reservation, String>, ReservationsRepositoryCustom {
     //    public void deleteByName
     public Reservation findReservationBy_id(String id);
+    public Reservation findReservationByCode(String code);
     public Long deleteUserBy_id(String id);
 }
