@@ -38,10 +38,10 @@ public class Reservation {
     private int roomNo;
 
     @Field("checkin")
-    private DateTimeFormat checkin;
+    private Date checkin;
 
     @Field("checkout")
-    private DateTimeFormat checkout;
+    private Date checkout;
 
     @Field("status")
     private String status;
@@ -49,7 +49,7 @@ public class Reservation {
     @Field("total")
     private int total;
 
-    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String customerName , int roomNo, DateTimeFormat checkin, DateTimeFormat checkout, String status) {
+    public Reservation(Date bookingFrom, Date bookingTo, String customerEmail, String customerName , int roomNo, Date checkin, Date checkout, String status) {
         this.bookingFrom = bookingFrom;
         this.bookingTo = bookingTo;
         this.customerEmail = customerEmail;
@@ -136,19 +136,19 @@ public class Reservation {
         this.roomNo = roomNo;
     }
 
-    public DateTimeFormat getCheckin() {
+    public Date getCheckin() {
         return checkin;
     }
 
-    public void setCheckin(DateTimeFormat checkin) {
+    public void setCheckin(Date checkin) {
         this.checkin = checkin;
     }
 
-    public DateTimeFormat getCheckout() {
+    public Date getCheckout() {
         return checkout;
     }
 
-    public void setCheckout(DateTimeFormat checkout) {
+    public void setCheckout(Date checkout) {
         this.checkout = checkout;
     }
 

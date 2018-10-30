@@ -61,8 +61,8 @@ public class RoomService {
 
             for (Reservation r: reservations
                  ) {
-                System.out.println("RoomNo : " + r.getRoomNo());
-                reservedRooms.add(r.getRoomNo());
+                if(!r.getStatus().equals("CANCELLED"))  // ignore cancelled reservations
+                    reservedRooms.add(r.getRoomNo());
             }
 
             // filter available room to be reserved
