@@ -37,6 +37,7 @@ public class StaffUserDetailService implements UserDetailsService {
 
         List<GrantedAuthority> listAuth = new LinkedList<>();
 
+        listAuth.add(new SimpleGrantedAuthority(staff.getName()));
         listAuth.add(new SimpleGrantedAuthority(staff.getRole()));
         listAuth.add(new SimpleGrantedAuthority(staff.get_id()));
 

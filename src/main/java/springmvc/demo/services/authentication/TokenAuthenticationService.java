@@ -21,7 +21,8 @@ public class TokenAuthenticationService {
 
         String id = auth.getAuthorities().toArray()[0].toString();
         String email = auth.getName();
-        String role = auth.getAuthorities().toArray()[1].toString();
+        String role = auth.getAuthorities().toArray()[2].toString();
+        String name = auth.getAuthorities().toArray()[1].toString();
 
         JSONObject resp = new JSONObject();
 
@@ -29,6 +30,7 @@ public class TokenAuthenticationService {
         resp.put("id", id);
         resp.put("email", email);
         resp.put("role", role);
+        resp.put("name", name);
         res.getWriter().write(resp.toString());
 //        res.addHeader(Constants.HEADER_STRING, Constants.TOKEN_PREFIX + " " + JWT);
     }
@@ -36,14 +38,15 @@ public class TokenAuthenticationService {
     public static String generateJWT(Authentication auth) {
 
         String id = auth.getAuthorities().toArray()[0].toString();
-        System.out.println(auth.getAuthorities().toArray()[1]);
+        String name = auth.getAuthorities().toArray()[1].toString();
         String email = auth.getName();
 
         Map<String, Object> hashmap = new HashMap<>();
 
-        hashmap.put("role", auth.getAuthorities().toArray()[1].toString());
+        hashmap.put("role", auth.getAuthorities().toArray()[2].toString());
         hashmap.put("email", email);
         hashmap.put("id", id);
+        hashmap.put("name", name);
 
         return Jwts.builder()
                 .setSubject(email)
@@ -65,7 +68,7 @@ public class TokenAuthenticationService {
 
                 List<GrantedAuthority> listAuth = new LinkedList<>();
                 listAuth.add(new SimpleGrantedAuthority(user.get("role").toString()));
-                return user != null? new UserCustom(user.getId(), null, listAuth,  user.get("email").toString() ): null;
+                return user != null? new UserCustom(user.getId(), null, listAuth,  user.get("email").toString(), user.get("name").toString() ): null;
             } catch (Exception e) {
 
                 request.setAttribute("expired", e.getMessage());
