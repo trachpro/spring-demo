@@ -57,14 +57,19 @@ public class TokenAuthenticationService {
     public static Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(Constants.HEADER_STRING);
         if(token != null) {
-            Claims user = Jwts.parser()
-                    .setSigningKey(Constants.SECRET)
-                    .parseClaimsJws(token.replace(Constants.TOKEN_PREFIX, ""))
-                    .getBody();
+            try {
+                Claims user = Jwts.parser()
+                        .setSigningKey(Constants.SECRET)
+                        .parseClaimsJws(token.replace(Constants.TOKEN_PREFIX, ""))
+                        .getBody();
 
-            List<GrantedAuthority> listAuth = new LinkedList<>();
-            listAuth.add(new SimpleGrantedAuthority(user.get("role").toString()));
-            return user != null? new UserCustom(user.getId(), null, listAuth,  user.get("email").toString() ): null;
+                List<GrantedAuthority> listAuth = new LinkedList<>();
+                listAuth.add(new SimpleGrantedAuthority(user.get("role").toString()));
+                return user != null? new UserCustom(user.getId(), null, listAuth,  user.get("email").toString() ): null;
+            } catch (Exception e) {
+
+                request.setAttribute("expired", e.getMessage());
+            }
         }
 
         return null;

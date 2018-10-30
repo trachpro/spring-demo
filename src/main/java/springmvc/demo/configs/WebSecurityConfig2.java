@@ -19,18 +19,18 @@ import springmvc.demo.services.authentication.StaffUserDetailService;
 
 @EnableWebSecurity
 @Configuration
-@Order(1)
+@Order(2)
 public class WebSecurityConfig2 extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private StaffUserDetailService currentUserDetailService;
+    private StaffUserDetailService staffUserDetailService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         System.out.println("the first");
         http
                 .antMatcher("/staff/login").csrf().disable().authorizeRequests()
-                .antMatchers(HttpMethod.POST, "/api/users").permitAll()
+                .antMatchers(HttpMethod.POST, "/staff/login").permitAll()
                 .and()
                 .addFilterBefore(new JWTCustomLoginFilter("/staff/login", authenticationManager()), UsernamePasswordAuthenticationFilter.class)
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
@@ -38,12 +38,7 @@ public class WebSecurityConfig2 extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(currentUserDetailService)
+        auth.userDetailsService(staffUserDetailService)
                 .passwordEncoder(new BCryptPasswordEncoder());
-    }
-
-    @Bean
-    public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
     }
 }
