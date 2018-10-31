@@ -72,4 +72,10 @@ public class ReservationsController {
         return ReservationService.checkout(code).toResponse();
     }
 
+    @GetMapping("/admin/{from}/{to}")
+    public @ResponseBody ResponseEntity<String> analyzeRevenue(@PathVariable String from, @PathVariable String to) {
+
+        return ReservationService.analyzeRevenue(from, to).toResponse();
+    }
+
 }

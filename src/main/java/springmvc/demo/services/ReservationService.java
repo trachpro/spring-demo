@@ -8,10 +8,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
 import springmvc.demo.Repositories.reservations.ReservationsRepository;
-import springmvc.demo.models.Reservation;
-import springmvc.demo.models.ResponseModel;
-import springmvc.demo.models.Room;
+import springmvc.demo.models.*;
 import springmvc.demo.utils.Commons;
+import springmvc.demo.utils.Converts;
 import springmvc.demo.utils.Response;
 
 import java.util.Date;
@@ -224,6 +223,32 @@ public class ReservationService {
             return new ResponseModel(reservation, "Retrieve reservation information successfully", HttpStatus.OK);
 
         } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    /**
+     * Calculate number of reserved rooms, and total revenue between 2 dates
+     * @param sFrom starting day
+     * @param sTo ending day
+     * @return ResponseModel
+     */
+    public static ResponseModel analyzeRevenue(String sFrom, String sTo) {
+        try {
+            Date from = Converts.convertStringToDate(sFrom);
+            Date to = Converts.convertStringToDate(sTo);
+
+            if(to.before(from)) {
+                return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST);
+            }
+            List<Revenue> list = reservationsRepository.findRevenueByMonth(from, to);
+
+
+            return new ResponseModel(new Revenues(list), "Retrieve information successfully", HttpStatus.OK);
+
+        } catch (Exception e) {
             e.printStackTrace();
             return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
