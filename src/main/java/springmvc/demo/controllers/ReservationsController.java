@@ -63,4 +63,13 @@ public class ReservationsController {
         return ReservationService.checkin(code).toResponse();
     }
 
+    @PutMapping("/check-out/{code}")
+    public @ResponseBody ResponseEntity<String> checkout(@PathVariable String code) {
+        if (code.length() == 0) {
+            return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST).toResponse();
+        }
+
+        return ReservationService.checkout(code).toResponse();
+    }
+
 }

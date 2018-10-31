@@ -43,6 +43,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers(HttpMethod.POST,"/api/reservations").hasAnyRole("MANAGER","STAFF","CLIENT")
                 .antMatchers(HttpMethod.PUT,"/api/reservations/cancel/{[a-zA-Z0-9]}").hasAnyRole("MANAGER","STAFF","CLIENT")
                 .antMatchers(HttpMethod.PUT,"/api/reservations/check-in/{[a-zA-Z0-9]}").hasAnyRole("MANAGER","STAFF")
+                .antMatchers(HttpMethod.PUT,"/api/reservations/check-out/{[a-zA-Z0-9]}").hasAnyRole("MANAGER","STAFF")
                 .and()
                 .addFilterBefore(new JWTAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class);
     }

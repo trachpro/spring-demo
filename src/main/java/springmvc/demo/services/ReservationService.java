@@ -137,28 +137,66 @@ public class ReservationService {
      */
     public static ResponseModel checkin(String code) {
         try{
-            Reservation reservation = findReservationByCode(code);
-
-            if (reservation == null) {
-                return new ResponseModel(JSONObject.NULL, "Reservation Not Found", HttpStatus.NOT_FOUND);
-            }
-
-            if(reservation.getStatus().equals("CANCELLED")) {
-                return new ResponseModel(JSONObject.NULL, "Forbidden. Reservation has been cancelled", HttpStatus.FORBIDDEN);
-            }
 
             Date checkinTime = new Date();
-            reservation.setCheckin(checkinTime);
-            reservation.setStatus("CHECK-IN");
 
-            reservationsRepository.save(reservation);
+            ResponseModel response = updateReservation(code, checkinTime, null, "CHECK-IN");
 
-            return new ResponseModel(reservation, "Check-in successfully", HttpStatus.OK);
+            return response;
 
         } catch (Exception e) {
             e.printStackTrace();
             return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    /**
+     * Check out activity
+     * @param code find reservation to update by code
+     * @return ResponseModel
+     */
+    public static ResponseModel checkout(String code) {
+        try{
+
+
+            Date checkoutTime = new Date();
+
+            ResponseModel response = updateReservation(code, null, checkoutTime, "FINISHED");
+
+            return response;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    private static ResponseModel updateReservation(String code, Date checkinTime, Date checkoutTime, String status) {
+        Reservation reservation = findReservationByCode(code);
+
+        if (reservation == null) {
+            return new ResponseModel(JSONObject.NULL, "Reservation Not Found", HttpStatus.NOT_FOUND);
+        }
+
+        if(reservation.getStatus().equals("CANCELLED")) {
+            return new ResponseModel(JSONObject.NULL, "Forbidden. Reservation has been cancelled", HttpStatus.FORBIDDEN);
+        }
+        String msg = "";
+        if(checkinTime != null) {
+            reservation.setCheckin(checkinTime);
+            msg = "Check-in successfully";
+        }
+
+
+        if(checkoutTime != null) {
+            reservation.setCheckout(checkoutTime);
+            msg = "Check-out successfully";
+        }
+
+
+        reservation.setStatus(status);
+
+        return new ResponseModel(reservation, msg, HttpStatus.OK);
     }
 
     private static Reservation findReservationByCode(String code) {
