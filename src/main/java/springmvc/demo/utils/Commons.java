@@ -66,6 +66,13 @@ public class Commons {
         return user.getEmail();
     }
 
+    public static String getName() {
+
+        UserCustom user = (UserCustom) SecurityContextHolder.getContext().getAuthentication();
+
+        return user.getuName();
+    }
+
     public static boolean isOwner(String id) {
 
         return SecurityContextHolder

@@ -33,7 +33,6 @@ public class CurrentUserDetailService implements UserDetailsService {
         List<GrantedAuthority> listAuth = new LinkedList<>();
 
         listAuth.add(new SimpleGrantedAuthority("ROLE_CLIENT"));
-        listAuth.add(new SimpleGrantedAuthority(user.get_id()));
 
         return new org.springframework.security.core.userdetails.User(user.getEmail(), user.getPassword(), listAuth);
 

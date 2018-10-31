@@ -24,8 +24,6 @@ public class StaffUserDetailService implements UserDetailsService {
     @Transactional
     public UserDetails loadUserByUsername(String s) throws UsernameNotFoundException {
 
-//        String[] email = s.split(" ");
-
         System.out.println("staff running");
 
         Staff staff = staffsRepository.getStaffModelByEmail(s);
@@ -38,7 +36,6 @@ public class StaffUserDetailService implements UserDetailsService {
         List<GrantedAuthority> listAuth = new LinkedList<>();
 
         listAuth.add(new SimpleGrantedAuthority(staff.getRole()));
-        listAuth.add(new SimpleGrantedAuthority(staff.get_id()));
 
         return new org.springframework.security.core.userdetails.User(staff.getEmail(), staff.getPassword(), listAuth);
     }
