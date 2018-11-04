@@ -1,6 +1,7 @@
 package springmvc.demo.controllers;
 
 
+import antlr.collections.List;
 import org.json.JSONObject;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
@@ -43,6 +44,19 @@ public class ReservationsController {
         }
 
         return ReservationService.addNewReservation(reservation).toResponse();
+    }
+
+    @GetMapping("/own")
+    public ResponseEntity<String> getReservationBelongToOwnCustomer() {
+
+        return ReservationService.findReservationByUser().toResponse();
+    }
+
+    @PostMapping("/{offsets}/{size}")
+    public ResponseEntity<String> pagingReservation(@PathVariable int offsets, @PathVariable int size, @RequestBody Map<String, String[]> body) {
+
+        String[] statusList = body.get("status");
+        return ReservationService.getPageReservations(statusList, offsets, size).toResponse();
     }
 
     @PutMapping("/cancel/{code}")

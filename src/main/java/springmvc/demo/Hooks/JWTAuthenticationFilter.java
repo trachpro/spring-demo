@@ -23,7 +23,7 @@ public class JWTAuthenticationFilter extends GenericFilterBean {
 
 //        final String msg = (expiredMsg == null)? expiredMsg: "Unauthorized";
 
-        System.out.println("---" + expiredMsg);
+        System.out.println("expiredMsg: " + expiredMsg);
         if(expiredMsg != null) {
 
 //            servletResponse.

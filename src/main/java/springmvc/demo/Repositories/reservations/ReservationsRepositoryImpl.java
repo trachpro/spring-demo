@@ -2,14 +2,19 @@ package springmvc.demo.Repositories.reservations;
 
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.aggregation.AggregationResults;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
+import org.springframework.data.repository.support.PageableExecutionUtils;
 import springmvc.demo.models.Reservation;
 import springmvc.demo.models.Revenue;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -43,6 +48,28 @@ public class ReservationsRepositoryImpl implements ReservationsRepositoryCustom 
         List<Reservation> reservations = mongoTemplate.find(query, Reservation.class, "reservations");
 
         return reservations;
+    }
+
+    @Override
+    public Page<Reservation> findReservationsWithPaging(String[] statusList, int offsets, int size) {
+
+        Criteria criteria = Criteria.where("status").in(statusList);
+
+        Pageable pageable = new PageRequest(offsets, size);
+
+        Query query = new Query();
+
+        query.with(pageable);
+
+        query.addCriteria(criteria);
+
+        List<Reservation> reservations = mongoTemplate.find(query, Reservation.class, "reservations");
+
+        return PageableExecutionUtils.getPage(
+                reservations,
+                pageable,
+                () -> mongoTemplate.count(query, Reservation.class)
+        );
     }
 
     @Override

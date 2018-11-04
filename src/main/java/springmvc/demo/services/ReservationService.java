@@ -3,6 +3,7 @@ package springmvc.demo.services;
 import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
@@ -202,6 +203,10 @@ public class ReservationService {
         return reservationsRepository.findReservationByCode(code);
     }
 
+    private static List<Reservation> findReservationByEmail(String email) {
+        return reservationsRepository.findReservationsByCustomerEmail(email);
+    }
+
 
     /**
      * Find all information of a reservation
@@ -230,6 +235,28 @@ public class ReservationService {
     }
 
     /**
+     * Find all information of a reservation
+     * @return List<ResponseModel></>
+     */
+    public static ResponseModel findReservationByUser() {
+
+        try{
+            List<Reservation> reservations = findReservationByEmail(Commons.getEmail());
+
+            if (reservations == null) {
+                return new ResponseModel(JSONObject.NULL, "Reservation Not Found", HttpStatus.NOT_FOUND);
+            }
+
+            return new ResponseModel(reservations, "Retrieve reservation information successfully", HttpStatus.OK);
+
+        } catch(Exception e) {
+            e.printStackTrace();
+            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    /**
      * Calculate number of reserved rooms, and total revenue between 2 dates
      * @param sFrom starting day
      * @param sTo ending day
@@ -247,6 +274,28 @@ public class ReservationService {
 
 
             return new ResponseModel(new Revenues(list), "Retrieve information successfully", HttpStatus.OK);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+
+    }
+
+    /**
+     * get reservation by status and pagination
+     * @param statusList List of status
+     * @param offsets page
+     * @param size size
+     * @return ResponseModel
+     */
+    public static ResponseModel getPageReservations(String[] statusList, int offsets, int size) {
+        try {
+
+            size = size == 0? 10: size;
+
+            Page result = reservationsRepository.findReservationsWithPaging(statusList, offsets, size);
+            return new ResponseModel(result, "Retrieve information successfully", HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
