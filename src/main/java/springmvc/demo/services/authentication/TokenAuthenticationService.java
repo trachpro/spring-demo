@@ -89,6 +89,8 @@ public class TokenAuthenticationService {
 
     public static Authentication getAuthentication(HttpServletRequest request) {
         String token = request.getHeader(Constants.HEADER_STRING);
+
+
         if(token != null) {
             try {
                 Claims user = Jwts.parser()
@@ -98,7 +100,7 @@ public class TokenAuthenticationService {
 
                 List<GrantedAuthority> listAuth = new LinkedList<>();
                 listAuth.add(new SimpleGrantedAuthority(user.get("role").toString()));
-                return user != null? new UserCustom(user.getId(), null, listAuth,  user.get("email").toString(), user.get("name").toString() ): null;
+                return user != null? new UserCustom(user.get("id"), null, listAuth,  user.get("email").toString(), user.get("name").toString() ): null;
             } catch (Exception e) {
 
                 request.setAttribute("expired", e.getMessage());

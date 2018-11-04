@@ -72,4 +72,10 @@ public class StaffsController {
 
         return StaffsService.deleteStaffById(id).toResponse();
     }
+
+    @PutMapping("/changepassword")
+    public ResponseEntity<String> changePassword(@RequestBody String newPassword) {
+
+        return StaffsService.changePassword(newPassword).toResponse();
+    }
 }

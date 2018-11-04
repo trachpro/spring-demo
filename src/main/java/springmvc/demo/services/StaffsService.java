@@ -6,6 +6,8 @@ import org.springframework.stereotype.Service;
 import springmvc.demo.Repositories.staffRepository.StaffsRepository;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.Staff;
+import springmvc.demo.services.authentication.TokenAuthenticationService;
+import springmvc.demo.utils.Commons;
 
 import java.util.List;
 import java.util.Map;
@@ -43,6 +45,11 @@ public class StaffsService {
 
                 staffsRepository.insert(user);
 
+                EmailService.send(
+                        user.getEmail(),
+                        "jwt",
+                        TokenAuthenticationService.generateJWT(user, user.getRole())
+                        );
                 return new ResponseModel(user, "register successfully!", HttpStatus.OK);
             } catch (Exception e) {
 
@@ -121,6 +128,25 @@ public class StaffsService {
 
             return new ResponseModel(x,"delete successful", HttpStatus.OK);
         } catch (Exception e) {
+
+            return new ResponseModel(null,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public static ResponseModel changePassword(String password) {
+
+        String email = Commons.getEmail();
+
+        try {
+
+            Staff staff = staffsRepository.getStaffModelByEmail(email);
+
+            staff.setPassword(passwordEncoder.encode(password));
+
+            staffsRepository.save(staff);
+
+            return new ResponseModel(staff,"delete successful", HttpStatus.OK);
+        } catch (Exception e){
 
             return new ResponseModel(null,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
         }

@@ -114,12 +114,11 @@ public class Commons {
 
         String name = params.get("name");
         String email = params.get("email");
-        String password = params.get("password");
+        String password = "defaulpassword";
         String role = params.get("role");
 
         if(name == null || name == "" ||
                 email == null || email == "" || !validateEmail(email) ||
-                params == null || password == "" ||
                 role == null || role == ""
                 ) {
             return null;
