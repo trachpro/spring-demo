@@ -5,7 +5,9 @@ import antlr.collections.List;
 import org.json.JSONObject;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.models.Reservation;
 import springmvc.demo.models.ResponseModel;
@@ -16,7 +18,11 @@ import springmvc.demo.utils.Response;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/reservations")
+@RequestMapping(
+        value = "api/reservations",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+        produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+)
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class ReservationsController {
 
@@ -36,7 +42,7 @@ public class ReservationsController {
      */
     @PostMapping(produces = {"application/hal+json"})
     public @ResponseBody
-    ResponseEntity<String> createReservation(@RequestBody Map<String, String> params) {
+    ResponseEntity<String> createReservation(@RequestBody MultiValueMap<String, String> params) {
         Reservation reservation = Commons.getReservationFromParams(params);
 
         if(reservation == null) {

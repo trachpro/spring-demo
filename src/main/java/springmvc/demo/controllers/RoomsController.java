@@ -3,7 +3,9 @@ package springmvc.demo.controllers;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.Repositories.rooms.RoomsRepository;
 import springmvc.demo.models.Room;
@@ -17,7 +19,10 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/rooms")
+@RequestMapping(
+        value = "api/rooms",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+        produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class RoomsController {
 
@@ -31,7 +36,7 @@ public class RoomsController {
 
     @PostMapping(produces = {"application/hal+json"})
     public @ResponseBody
-    ResponseEntity<String> createRoom(@RequestBody Map<String, String> pet) {
+    ResponseEntity<String> createRoom(@RequestBody MultiValueMap<String, String> pet) {
 
         Room room = new Room();
 

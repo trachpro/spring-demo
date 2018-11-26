@@ -3,6 +3,7 @@ package springmvc.demo.services;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import springmvc.demo.Repositories.staffRepository.StaffsRepository;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.Staff;
@@ -79,7 +80,7 @@ public class StaffsService {
         }
     }
 
-    public static ResponseModel updateStaffById(String id, Map<String, String> params) {
+    public static ResponseModel updateStaffById(String id, MultiValueMap<String, String> params) {
 
         Staff user;
 
@@ -95,16 +96,16 @@ public class StaffsService {
             return new ResponseModel(null,"User not found!", HttpStatus.NOT_FOUND);
         }
 
-        for(Map.Entry<String, String> entry: params.entrySet()) {
+        for(String str: params.keySet()) {
 
-            switch (entry.getKey()) {
+            switch (str) {
 
                 case "name":
-                    user.setName(entry.getValue());
+                    user.setName(params.getFirst(str));
                     break;
 
                 case "password":
-                    user.setPassword(passwordEncoder.encode(entry.getValue()));
+                    user.setPassword(passwordEncoder.encode(params.getFirst(str)));
                     break;
 
                     default: break;

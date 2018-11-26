@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.MultiValueMap;
 import springmvc.demo.models.Reservation;
 import springmvc.demo.models.Staff;
 import springmvc.demo.models.User;
@@ -94,11 +95,10 @@ public class Commons {
         return false;
     }
 
-    public static User getUserFromParams(Map<String, String> params) {
-
-        String name = params.get("name");
-        String email = params.get("email");
-        String password = params.get("password");
+    public static User getUserFromParams(MultiValueMap<String, String> params) {
+        String name = params.getFirst("name");
+        String email = params.getFirst("email");
+        String password = params.getFirst("password");
 
         if(name == null || name == "" ||
                 email == null || email == "" || !validateEmail(email) ||
@@ -110,12 +110,12 @@ public class Commons {
         return new User( name, passwordEncoder.encode(password), email );
     }
 
-    public static Staff getStaffFromParams(Map<String, String> params) {
+    public static Staff getStaffFromParams(MultiValueMap<String, String> params) {
 
-        String name = params.get("name");
-        String email = params.get("email");
+        String name = params.getFirst("name");
+        String email = params.getFirst("email");
         String password = "defaulpassword";
-        String role = params.get("role");
+        String role = params.getFirst("role");
 
         if(name == null || name == "" ||
                 email == null || email == "" || !validateEmail(email) ||
@@ -132,13 +132,13 @@ public class Commons {
         return matcher.find();
     }
 
-    public static Reservation getReservationFromParams(Map<String, String> params) {
+    public static Reservation getReservationFromParams(MultiValueMap<String, String> params) {
 
-        Date from = Converts.convertStringToDate(params.get("from"));
-        Date to = Converts.convertStringToDate(params.get("to"));
-        String name = params.get("name");
+        Date from = Converts.convertStringToDate(params.getFirst("from"));
+        Date to = Converts.convertStringToDate(params.getFirst("to"));
+        String name = params.getFirst("name");
 
-        int roomNo = Integer.parseInt(params.get("room"));
+        int roomNo = Integer.parseInt(params.getFirst("room"));
 
         if(from == null || to == null || name == null || name.length() == 0 || roomNo <= 0) {
             return null;

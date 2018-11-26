@@ -16,7 +16,11 @@ import springmvc.demo.services.UsersService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping(
+        value = "api/users",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+        produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+)
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class UsersController {
 
@@ -26,15 +30,11 @@ public class UsersController {
         return UsersService.getAllUsers().toResponse();
     }
 
-    @PostMapping(
-            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
-            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
-            )
-    public @ResponseBody ResponseEntity<String> createUser( MultiValueMap pet) {
+    @PostMapping
+    public @ResponseBody ResponseEntity<String> createUser(@RequestBody MultiValueMap<String, String> pet) {
 
-        System.out.println("params: " + pet);
-//        User user = Commons.getUserFromParams(pet);
-        User user = new User();
+        User user = Commons.getUserFromParams(pet);
+//        System.out.println("users: " + user.getEmail());
         if(user == null) {
             return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
         }
