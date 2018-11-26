@@ -4,7 +4,9 @@ package springmvc.demo.controllers;
 import org.json.JSONObject;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.models.User;
 import springmvc.demo.utils.Commons;
@@ -24,11 +26,15 @@ public class UsersController {
         return UsersService.getAllUsers().toResponse();
     }
 
-    @PostMapping(produces = {"application/hal+json"})
-    public @ResponseBody ResponseEntity<String> createUser(@RequestBody Map<String, String> pet) {
+    @PostMapping(
+            consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+            produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+            )
+    public @ResponseBody ResponseEntity<String> createUser( MultiValueMap pet) {
 
-        User user = Commons.getUserFromParams(pet);
-
+        System.out.println("params: " + pet);
+//        User user = Commons.getUserFromParams(pet);
+        User user = new User();
         if(user == null) {
             return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
         }
