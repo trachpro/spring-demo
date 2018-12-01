@@ -134,8 +134,8 @@ public class Commons {
 
     public static Reservation getReservationFromParams(MultiValueMap<String, String> params) {
 
-        Date from = Converts.convertStringToDate(params.getFirst("from"));
-        Date to = Converts.convertStringToDate(params.getFirst("to"));
+        Date from = Converts.convertStringToDate(params.getFirst("bookingFrom"));
+        Date to = Converts.convertStringToDate(params.getFirst("bookingTo"));
         String name = params.getFirst("name");
 
         int roomNo = Integer.parseInt(params.getFirst("room"));
