@@ -136,9 +136,9 @@ public class Commons {
 
         Date from = Converts.convertStringToDate(params.getFirst("bookingFrom"));
         Date to = Converts.convertStringToDate(params.getFirst("bookingTo"));
-        String name = params.getFirst("name");
+        String name = params.getFirst("customerName");
 
-        int roomNo = Integer.parseInt(params.getFirst("room"));
+        int roomNo = Integer.parseInt(params.getFirst("roomNo"));
 
         if(from == null || to == null || name == null || name.length() == 0 || roomNo <= 0) {
             return null;
