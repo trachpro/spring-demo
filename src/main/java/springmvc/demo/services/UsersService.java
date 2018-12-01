@@ -1,12 +1,16 @@
 package springmvc.demo.services;
 
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCrypt;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.RestController;
 import springmvc.demo.Repositories.users.UsersRepository;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.User;
+import springmvc.demo.utils.Commons;
 
 import java.util.Map;
 
@@ -18,10 +22,10 @@ public class UsersService {
 
     private static PasswordEncoder passwordEncoder;
 
-    public UsersService(UsersRepository repo, PasswordEncoder encoder) {
+    public UsersService(UsersRepository repo, PasswordEncoder pwdE) {
 
         usersRepository = repo;
-        passwordEncoder = encoder;
+        passwordEncoder = pwdE;
     }
 
     public static ResponseModel getAllUsers() {
@@ -66,32 +70,31 @@ public class UsersService {
         }
     }
 
-    public static ResponseModel updateUserById(String id, Map<String, String> params) {
+    public static ResponseModel changePassword(MultiValueMap<String, String> params) {
 
         System.out.println(usersRepository == null);
-        User user = usersRepository.findUserBy_id(id);
+        User user = usersRepository.findUserByEmail(Commons.getEmail());
 
         if(user == null) {
 
             return new ResponseModel(null,"User not found!", HttpStatus.NOT_FOUND);
         }
 
-        for(Map.Entry<String, String> entry: params.entrySet()) {
+        String oldPassword = params.getFirst("oldPassword");
+        String newPassword = params.getFirst("newPassword");
 
-            switch (entry.getKey()) {
-
-                case "name":
-                    user.setName(entry.getValue());
-                    break;
-
-                case "password":
-                    user.setPassword(passwordEncoder.encode(entry.getValue()));
-                    break;
-            }
+        if(oldPassword!= null &&
+                BCrypt.checkpw(oldPassword, user.getPassword()) &&
+                Commons.isValidPassword(newPassword)
+                )
+        {
+                user.setPassword(passwordEncoder.encode(newPassword));
+        } else {
+            return new ResponseModel(null,"invalid old password not matching or invalid new password!", HttpStatus.BAD_REQUEST);
         }
 
         usersRepository.save(user);
-        return new ResponseModel(user, "update successful!", HttpStatus.OK);
+        return new ResponseModel(null, "update successful!", HttpStatus.OK);
     }
 
     public static ResponseModel deleteUserById(String id) {
