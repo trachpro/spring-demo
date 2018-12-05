@@ -4,7 +4,9 @@ package springmvc.demo.controllers;
 import org.json.JSONObject;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.models.User;
 import springmvc.demo.utils.Commons;
@@ -14,7 +16,11 @@ import springmvc.demo.services.UsersService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/users")
+@RequestMapping(
+        value = "api/users",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+        produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE}
+)
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class UsersController {
 
@@ -24,11 +30,11 @@ public class UsersController {
         return UsersService.getAllUsers().toResponse();
     }
 
-    @PostMapping(produces = {"application/hal+json"})
-    public @ResponseBody ResponseEntity<String> createUser(@RequestBody Map<String, String> pet) {
+    @PostMapping
+    public @ResponseBody ResponseEntity<String> createUser(@RequestBody MultiValueMap<String, String> pet) {
 
         User user = Commons.getUserFromParams(pet);
-
+//        System.out.println("users: " + user.getEmail());
         if(user == null) {
             return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
         }
@@ -47,15 +53,10 @@ public class UsersController {
         return UsersService.getUserById(id).toResponse();
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody Map<String, String> params) {
+    @PutMapping("/password")
+    public ResponseEntity<String> updateUser( @RequestBody MultiValueMap<String, String> params) {
 
-        if(!Commons.isManager() && !Commons.isOwner(id)) {
-
-            return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
-        }
-
-        return UsersService.updateUserById(id, params).toResponse();
+        return UsersService.changePassword( params).toResponse();
     }
 
     @DeleteMapping("/{id}")

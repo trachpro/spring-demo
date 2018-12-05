@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.util.MultiValueMap;
 import springmvc.demo.models.Reservation;
 import springmvc.demo.models.Staff;
 import springmvc.demo.models.User;
@@ -22,6 +23,8 @@ public class Commons {
 
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern VALID_PASSWORD_ADDRESS_REGEX = Pattern.compile("^[A-Za-z0-9]{6,}$", Pattern.CASE_INSENSITIVE);
 
     @Autowired
     private static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -94,11 +97,10 @@ public class Commons {
         return false;
     }
 
-    public static User getUserFromParams(Map<String, String> params) {
-
-        String name = params.get("name");
-        String email = params.get("email");
-        String password = params.get("password");
+    public static User getUserFromParams(MultiValueMap<String, String> params) {
+        String name = params.getFirst("name");
+        String email = params.getFirst("email");
+        String password = params.getFirst("password");
 
         if(name == null || name == "" ||
                 email == null || email == "" || !validateEmail(email) ||
@@ -110,16 +112,15 @@ public class Commons {
         return new User( name, passwordEncoder.encode(password), email );
     }
 
-    public static Staff getStaffFromParams(Map<String, String> params) {
+    public static Staff getStaffFromParams(MultiValueMap<String, String> params) {
 
-        String name = params.get("name");
-        String email = params.get("email");
-        String password = params.get("password");
-        String role = params.get("role");
+        String name = params.getFirst("name");
+        String email = params.getFirst("email");
+        String password = "defaulpassword";
+        String role = params.getFirst("role");
 
         if(name == null || name == "" ||
                 email == null || email == "" || !validateEmail(email) ||
-                params == null || password == "" ||
                 role == null || role == ""
                 ) {
             return null;
@@ -133,13 +134,18 @@ public class Commons {
         return matcher.find();
     }
 
-    public static Reservation getReservationFromParams(Map<String, String> params) {
+    public static boolean isValidPassword(String password) {
+        Matcher matcher = VALID_PASSWORD_ADDRESS_REGEX.matcher(password);
+        return matcher.find();
+    }
 
-        Date from = Converts.convertStringToDate(params.get("from"));
-        Date to = Converts.convertStringToDate(params.get("to"));
-        String name = params.get("name");
+    public static Reservation getReservationFromParams(MultiValueMap<String, String> params) {
 
-        int roomNo = Integer.parseInt(params.get("room"));
+        Date from = Converts.convertStringToDate(params.getFirst("bookingFrom"));
+        Date to = Converts.convertStringToDate(params.getFirst("bookingTo"));
+        String name = params.getFirst("customerName");
+
+        int roomNo = Integer.parseInt(params.getFirst("roomNo"));
 
         if(from == null || to == null || name == null || name.length() == 0 || roomNo <= 0) {
             return null;

@@ -5,10 +5,14 @@ import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.util.MultiValueMap;
 import springmvc.demo.repositories.staffRepository.StaffsRepository;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.Staff;
+import springmvc.demo.services.authentication.TokenAuthenticationService;
+import springmvc.demo.utils.Commons;
 import springmvc.demo.utils.Message;
+
 
 import java.util.List;
 import java.util.Map;
@@ -46,7 +50,12 @@ public class StaffsService {
 
                 staffsRepository.insert(user);
 
-                return new ResponseModel(user, Message.SUCCESS, HttpStatus.OK);
+                EmailService.send(
+                        user.getEmail(),
+                        "jwt",
+                        TokenAuthenticationService.generateJWT(user, user.getRole())
+                        );
+                return new ResponseModel(user, "register successfully!", HttpStatus.OK);
             } catch (Exception e) {
 
                 return new ResponseModel(JSONObject.NULL, Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -75,7 +84,7 @@ public class StaffsService {
         }
     }
 
-    public static ResponseModel updateStaffById(String id, Map<String, String> params) {
+    public static ResponseModel updateStaffById(String id, MultiValueMap<String, String> params) {
 
         Staff user;
 
@@ -91,16 +100,16 @@ public class StaffsService {
             return new ResponseModel(JSONObject.NULL,Message.NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
-        for(Map.Entry<String, String> entry: params.entrySet()) {
+        for(String str: params.keySet()) {
 
-            switch (entry.getKey()) {
+            switch (str) {
 
                 case "name":
-                    user.setName(entry.getValue());
+                    user.setName(params.getFirst(str));
                     break;
 
                 case "password":
-                    user.setPassword(passwordEncoder.encode(entry.getValue()));
+                    user.setPassword(passwordEncoder.encode(params.getFirst(str)));
                     break;
 
                     default: break;
@@ -126,6 +135,25 @@ public class StaffsService {
         } catch (Exception e) {
 
             return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    public static ResponseModel changePassword(String password) {
+
+        String email = Commons.getEmail();
+
+        try {
+
+            Staff staff = staffsRepository.getStaffModelByEmail(email);
+
+            staff.setPassword(passwordEncoder.encode(password));
+
+            staffsRepository.save(staff);
+
+            return new ResponseModel(staff,"delete successful", HttpStatus.OK);
+        } catch (Exception e){
+
+            return new ResponseModel(null,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

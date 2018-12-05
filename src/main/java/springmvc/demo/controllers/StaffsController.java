@@ -3,7 +3,9 @@ package springmvc.demo.controllers;
 import org.json.JSONObject;
 import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.models.Staff;
 import springmvc.demo.utils.Commons;
@@ -13,7 +15,10 @@ import springmvc.demo.services.StaffsService;
 import java.util.Map;
 
 @RestController
-@RequestMapping("api/staffs")
+@RequestMapping(
+        value = "api/staffs",
+        consumes = MediaType.APPLICATION_FORM_URLENCODED_VALUE,
+        produces = {MediaType.APPLICATION_ATOM_XML_VALUE, MediaType.APPLICATION_JSON_VALUE})
 @EnableHypermediaSupport(type = EnableHypermediaSupport.HypermediaType.HAL)
 public class StaffsController {
 
@@ -26,7 +31,7 @@ public class StaffsController {
     }
 
     @PostMapping(produces = {"application/hal+json"})
-    public @ResponseBody ResponseEntity<String> createStaff(@RequestBody Map<String, String> pet) {
+    public @ResponseBody ResponseEntity<String> createStaff(@RequestBody MultiValueMap<String, String> pet) {
 
         Staff user = Commons.getStaffFromParams(pet);
 
@@ -49,7 +54,7 @@ public class StaffsController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody Map<String, String> params) {
+    public ResponseEntity<String> updateUser(@PathVariable String id, @RequestBody MultiValueMap<String, String> params) {
 
         if(!Commons.isManager() && !Commons.isOwner(id)) {
 
@@ -71,5 +76,11 @@ public class StaffsController {
         }
 
         return StaffsService.deleteStaffById(id).toResponse();
+    }
+
+    @PutMapping("/changepassword")
+    public ResponseEntity<String> changePassword(@RequestBody String newPassword) {
+
+        return StaffsService.changePassword(newPassword).toResponse();
     }
 }
