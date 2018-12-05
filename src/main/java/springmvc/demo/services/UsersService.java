@@ -1,12 +1,14 @@
 package springmvc.demo.services;
 
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
-import springmvc.demo.Repositories.users.UsersRepository;
+import springmvc.demo.repositories.users.UsersRepository;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.User;
+import springmvc.demo.utils.Message;
 
 import java.util.Map;
 
@@ -27,10 +29,10 @@ public class UsersService {
     public static ResponseModel getAllUsers() {
 
         try {
-            return new ResponseModel(usersRepository.findAll(),"successfull", HttpStatus.OK);
+            return new ResponseModel(usersRepository.findAll(), Message.SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
 
-            return new ResponseModel(null, "internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(null, Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -42,14 +44,14 @@ public class UsersService {
 
                 usersRepository.insert(user);
 
-                return new ResponseModel(user, "register successfully!", HttpStatus.OK);
+                return new ResponseModel(user, Message.SUCCESS, HttpStatus.OK);
             } catch (Exception e) {
 
-                return new ResponseModel(null, "internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseModel(JSONObject.NULL, Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
 
-            return new ResponseModel(null,"User is already existed!", HttpStatus.CONFLICT);
+            return new ResponseModel(JSONObject.NULL,"User is already existed!", HttpStatus.CONFLICT);
         }
     }
 
@@ -59,10 +61,10 @@ public class UsersService {
 
         if(user == null) {
 
-            return new ResponseModel(null,"User not found!", HttpStatus.BAD_REQUEST);
+            return new ResponseModel(JSONObject.NULL,"User not found!", HttpStatus.BAD_REQUEST);
         } else {
 
-            return new ResponseModel(user, "success", HttpStatus.OK);
+            return new ResponseModel(user, Message.SUCCESS, HttpStatus.OK);
         }
     }
 
@@ -73,7 +75,7 @@ public class UsersService {
 
         if(user == null) {
 
-            return new ResponseModel(null,"User not found!", HttpStatus.NOT_FOUND);
+            return new ResponseModel(JSONObject.NULL,"User not found!", HttpStatus.NOT_FOUND);
         }
 
         for(Map.Entry<String, String> entry: params.entrySet()) {
@@ -91,7 +93,7 @@ public class UsersService {
         }
 
         usersRepository.save(user);
-        return new ResponseModel(user, "update successful!", HttpStatus.OK);
+        return new ResponseModel(user, Message.SUCCESS, HttpStatus.OK);
     }
 
     public static ResponseModel deleteUserById(String id) {
@@ -100,10 +102,10 @@ public class UsersService {
 
             Long x = usersRepository.deleteUserBy_id(id);
 
-            return new ResponseModel(x,"delete successful", HttpStatus.OK);
+            return new ResponseModel(x,Message.SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
 
-            return new ResponseModel(null,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

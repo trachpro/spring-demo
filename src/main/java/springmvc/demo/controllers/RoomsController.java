@@ -5,13 +5,11 @@ import org.springframework.hateoas.config.EnableHypermediaSupport;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import springmvc.demo.Repositories.rooms.RoomsRepository;
+import springmvc.demo.repositories.rooms.RoomsRepository;
 import springmvc.demo.models.Room;
-import springmvc.demo.services.EmailService;
 import springmvc.demo.services.RoomService;
 import springmvc.demo.utils.Converts;
 
-import javax.mail.MessagingException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

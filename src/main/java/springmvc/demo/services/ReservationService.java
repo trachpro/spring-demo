@@ -1,17 +1,15 @@
 package springmvc.demo.services;
 
-import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
-import springmvc.demo.Repositories.reservations.ReservationsRepository;
+import springmvc.demo.repositories.reservations.ReservationsRepository;
 import springmvc.demo.models.*;
 import springmvc.demo.utils.Commons;
 import springmvc.demo.utils.Converts;
-import springmvc.demo.utils.Response;
+import springmvc.demo.utils.Message;
 
 import java.util.Date;
 import java.util.List;
@@ -50,17 +48,17 @@ public class ReservationService {
 
             // validate room number
             if (roomDetail == null) {
-                return new ResponseModel(JSONObject.NULL, "Room is not available to reserve", HttpStatus.CONFLICT);
+                return new ResponseModel(JSONObject.NULL, Message.CONFLICT, HttpStatus.CONFLICT);
             }
 
             // validate booking time
             if (to.before(from)) {
-                return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST);
+                return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST);
             }
 
             // check room availibility
             if(!RoomService.checkRoomAvailibilityBetweenDate(roomNo, from, to))
-                return new ResponseModel(JSONObject.NULL, "Room is not available to reserve", HttpStatus.CONFLICT);
+                return new ResponseModel(JSONObject.NULL, Message.CONFLICT, HttpStatus.CONFLICT);
 
 
             String code = generateBookingCode();
@@ -71,11 +69,11 @@ public class ReservationService {
 
             reservationsRepository.save(reservation);
 
-            return new ResponseModel(reservation, "Booking Successfully", HttpStatus.OK);
+            return new ResponseModel(reservation, Message.SUCCESS, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -105,27 +103,27 @@ public class ReservationService {
             Reservation reservation = findReservationByCode(code);
 
             if (reservation == null) {
-                return new ResponseModel(JSONObject.NULL, "Reservation Not Found", HttpStatus.NOT_FOUND);
+                return new ResponseModel(JSONObject.NULL, Message.NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             // authenticate reservation's owner
             if(Commons.isCustomer() && !Commons.getEmail().equals(reservation.getCustomerEmail())) {
-                return new ResponseModel(JSONObject.NULL, "Forbidden", HttpStatus.FORBIDDEN);
+                return new ResponseModel(JSONObject.NULL, Message.FORBIDDEN, HttpStatus.FORBIDDEN);
             }
 
             if(reservation.getStatus().equals("CHECK-IN") || reservation.getStatus().equals("FINISHED")) {
-                return new ResponseModel(JSONObject.NULL, "Forbidden", HttpStatus.FORBIDDEN);
+                return new ResponseModel(JSONObject.NULL, Message.FORBIDDEN, HttpStatus.FORBIDDEN);
             }
 
             reservation.setStatus("CANCELLED");
 
             reservationsRepository.save(reservation);
 
-            return new ResponseModel(reservation, "Reservation Canceled", HttpStatus.OK);
+            return new ResponseModel(reservation, Message.SUCCESS, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -145,7 +143,7 @@ public class ReservationService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -166,7 +164,7 @@ public class ReservationService {
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -174,11 +172,11 @@ public class ReservationService {
         Reservation reservation = findReservationByCode(code);
 
         if (reservation == null) {
-            return new ResponseModel(JSONObject.NULL, "Reservation Not Found", HttpStatus.NOT_FOUND);
+            return new ResponseModel(JSONObject.NULL, Message.NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         if(reservation.getStatus().equals("CANCELLED")) {
-            return new ResponseModel(JSONObject.NULL, "Forbidden. Reservation has been cancelled", HttpStatus.FORBIDDEN);
+            return new ResponseModel(JSONObject.NULL, Message.FORBIDDEN, HttpStatus.FORBIDDEN);
         }
         String msg = "";
         if(checkinTime != null) {
@@ -195,7 +193,7 @@ public class ReservationService {
 
         reservation.setStatus(status);
 
-        return new ResponseModel(reservation, msg, HttpStatus.OK);
+        return new ResponseModel(reservation, Message.SUCCESS, HttpStatus.OK);
     }
 
     private static Reservation findReservationByCode(String code) {
@@ -213,18 +211,18 @@ public class ReservationService {
             Reservation reservation = findReservationByCode(code);
 
             if (reservation == null) {
-                return new ResponseModel(JSONObject.NULL, "Reservation Not Found", HttpStatus.NOT_FOUND);
+                return new ResponseModel(JSONObject.NULL, Message.NOT_FOUND, HttpStatus.NOT_FOUND);
             }
 
             if(Commons.isCustomer() && !Commons.getEmail().equals(reservation.getCustomerEmail())) {
-                return new ResponseModel(JSONObject.NULL, "Forbidden", HttpStatus.FORBIDDEN);
+                return new ResponseModel(JSONObject.NULL, Message.FORBIDDEN, HttpStatus.FORBIDDEN);
             }
 
-            return new ResponseModel(reservation, "Retrieve reservation information successfully", HttpStatus.OK);
+            return new ResponseModel(reservation, Message.SUCCESS, HttpStatus.OK);
 
         } catch(Exception e) {
             e.printStackTrace();
-            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -241,16 +239,16 @@ public class ReservationService {
             Date to = Converts.convertStringToDate(sTo);
 
             if(to.before(from)) {
-                return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST);
+                return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST);
             }
             List<Revenue> list = reservationsRepository.findRevenueByMonth(from, to);
 
 
-            return new ResponseModel(new Revenues(list), "Retrieve information successfully", HttpStatus.OK);
+            return new ResponseModel(new Revenues(list), Message.SUCCESS, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

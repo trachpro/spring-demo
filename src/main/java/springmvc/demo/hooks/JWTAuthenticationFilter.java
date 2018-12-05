@@ -1,4 +1,4 @@
-package springmvc.demo.Hooks;
+package springmvc.demo.hooks;
 
 import org.json.JSONObject;
 import org.springframework.security.core.Authentication;

@@ -1,4 +1,4 @@
-package springmvc.demo.Repositories.staffRepository;
+package springmvc.demo.repositories.staffRepository;
 
 import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;

@@ -1,11 +1,14 @@
 package springmvc.demo.services;
 
+import com.mongodb.util.JSON;
+import org.json.JSONObject;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import springmvc.demo.Repositories.staffRepository.StaffsRepository;
+import springmvc.demo.repositories.staffRepository.StaffsRepository;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.Staff;
+import springmvc.demo.utils.Message;
 
 import java.util.List;
 import java.util.Map;
@@ -28,10 +31,10 @@ public class StaffsService {
         try {
             List<Staff> staffList = staffsRepository.findAll();
 
-            return new ResponseModel(staffList, "successfully!", HttpStatus.OK);
+            return new ResponseModel(staffList, Message.SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
 
-            return new ResponseModel(null, "internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL, Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -43,14 +46,14 @@ public class StaffsService {
 
                 staffsRepository.insert(user);
 
-                return new ResponseModel(user, "register successfully!", HttpStatus.OK);
+                return new ResponseModel(user, Message.SUCCESS, HttpStatus.OK);
             } catch (Exception e) {
 
-                return new ResponseModel(null, "internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+                return new ResponseModel(JSONObject.NULL, Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
             }
         } else {
 
-            return new ResponseModel(null,"User is already existed!", HttpStatus.CONFLICT);
+            return new ResponseModel(JSONObject.NULL,"User is already existed!", HttpStatus.CONFLICT);
         }
     }
 
@@ -61,14 +64,14 @@ public class StaffsService {
 
             if(user == null) {
 
-                return new ResponseModel(null,"User not found!", HttpStatus.BAD_REQUEST);
+                return new ResponseModel(JSONObject.NULL,Message.NOT_FOUND, HttpStatus.BAD_REQUEST);
             } else {
 
-                return new ResponseModel(user, "success", HttpStatus.OK);
+                return new ResponseModel(user, Message.SUCCESS, HttpStatus.OK);
             }
         } catch (Exception e) {
 
-            return new ResponseModel(null,"Internal Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(null,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -80,12 +83,12 @@ public class StaffsService {
             user = staffsRepository.findStaffBy_id(id);
         } catch (Exception e) {
 
-            return new ResponseModel(null,"Internal Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
         if(user == null) {
 
-            return new ResponseModel(null,"User not found!", HttpStatus.NOT_FOUND);
+            return new ResponseModel(JSONObject.NULL,Message.NOT_FOUND, HttpStatus.NOT_FOUND);
         }
 
         for(Map.Entry<String, String> entry: params.entrySet()) {
@@ -106,10 +109,10 @@ public class StaffsService {
 
         try {
             staffsRepository.save(user);
-            return new ResponseModel(user, "update successful!", HttpStatus.OK);
+            return new ResponseModel(user, Message.SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
 
-            return new ResponseModel(null,"Internal Error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -119,10 +122,10 @@ public class StaffsService {
 
             Long x = staffsRepository.deleteStaffBy_id(id);
 
-            return new ResponseModel(x,"delete successful", HttpStatus.OK);
+            return new ResponseModel(x,Message.SUCCESS, HttpStatus.OK);
         } catch (Exception e) {
 
-            return new ResponseModel(null,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 }

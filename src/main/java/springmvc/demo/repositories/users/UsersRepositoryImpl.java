@@ -1,4 +1,4 @@
-package springmvc.demo.Repositories.users;
+package springmvc.demo.repositories.users;
 
 import org.bson.Document;
 import org.json.JSONObject;

@@ -1,10 +1,7 @@
-package springmvc.demo.Repositories.users;
+package springmvc.demo.repositories.users;
 
 import org.bson.Document;
-import org.json.JSONObject;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import springmvc.demo.models.User;
 
 public interface UsersRepositoryCustom {
 

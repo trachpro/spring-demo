@@ -1,4 +1,4 @@
-package springmvc.demo.Hooks;
+package springmvc.demo.hooks;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.springframework.security.authentication.AuthenticationManager;

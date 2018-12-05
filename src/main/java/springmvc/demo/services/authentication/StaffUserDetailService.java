@@ -8,7 +8,7 @@ import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import springmvc.demo.Repositories.staffRepository.StaffsRepository;
+import springmvc.demo.repositories.staffRepository.StaffsRepository;
 import springmvc.demo.models.Staff;
 
 import java.util.LinkedList;

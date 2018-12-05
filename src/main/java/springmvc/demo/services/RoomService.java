@@ -5,15 +5,14 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RestController;
-import springmvc.demo.Repositories.rooms.RoomsRepository;
+import springmvc.demo.repositories.rooms.RoomsRepository;
 import springmvc.demo.models.Reservation;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.models.Room;
 import springmvc.demo.models.Rooms;
 import springmvc.demo.utils.Converts;
+import springmvc.demo.utils.Message;
 
-import java.lang.reflect.Array;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.Iterator;
@@ -46,7 +45,7 @@ public class RoomService {
             Date to = Converts.convertStringToDate(sTo);
 
             if(capacity <= 0 || to.before(from)) {
-                return new ResponseModel(JSONObject.NULL,"Invalid input", HttpStatus.BAD_REQUEST);
+                return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST);
             }
 
             // list of rooms matching by number of stayers
@@ -74,11 +73,11 @@ public class RoomService {
                 }
             }
 
-            return new ResponseModel(new Rooms(rooms), "Success", HttpStatus.OK);
+            return new ResponseModel(new Rooms(rooms), Message.SUCCESS, HttpStatus.OK);
 
         } catch (Exception e) {
             e.printStackTrace();
-            return new ResponseModel(JSONObject.NULL,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseModel(JSONObject.NULL,Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
 
     }

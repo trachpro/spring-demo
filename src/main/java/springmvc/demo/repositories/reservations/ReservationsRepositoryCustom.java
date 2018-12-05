@@ -1,6 +1,5 @@
-package springmvc.demo.Repositories.reservations;
+package springmvc.demo.repositories.reservations;
 
-import org.bson.Document;
 import springmvc.demo.models.Reservation;
 import springmvc.demo.models.Revenue;
 

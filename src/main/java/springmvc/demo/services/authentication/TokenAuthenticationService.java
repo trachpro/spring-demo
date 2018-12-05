@@ -8,8 +8,8 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
-import springmvc.demo.Repositories.staffRepository.StaffsRepository;
-import springmvc.demo.Repositories.users.UsersRepository;
+import springmvc.demo.repositories.staffRepository.StaffsRepository;
+import springmvc.demo.repositories.users.UsersRepository;
 import springmvc.demo.configs.Constants;
 import springmvc.demo.models.Person;
 
