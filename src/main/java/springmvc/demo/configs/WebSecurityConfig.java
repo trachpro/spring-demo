@@ -36,7 +36,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        System.out.println("the second");
+        System.out.println("the second 1");
         http
                 .cors().and()
                 .csrf().disable().authorizeRequests()
