@@ -59,9 +59,10 @@ public class ReservationsController {
     }
 
     @PostMapping("/{offsets}/{size}")
-    public ResponseEntity<String> pagingReservation(@PathVariable int offsets, @PathVariable int size, @RequestBody MultiValueMap<String, String[]> body) {
-
-        String[] statusList = body.getFirst("status");
+    public ResponseEntity<String> pagingReservation(@PathVariable int offsets, @PathVariable int size, @RequestBody MultiValueMap<String, String> body) {
+        System.out.println(body.getFirst("status"));
+        String[] statusList = body.getFirst("status").split(",");
+        System.out.println(statusList[0]);
         return ReservationService.getPageReservations(statusList, offsets, size).toResponse();
     }
 
