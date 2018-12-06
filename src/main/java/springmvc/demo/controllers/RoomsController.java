@@ -67,7 +67,7 @@ public class RoomsController {
 
     @GetMapping({"/{roomNo}"})
     public Room getRoomByRoomNo(@PathVariable int roomNo) {
-
+        //deploy
         return RoomService.findRoomByRoomNo(roomNo);
     }
 
