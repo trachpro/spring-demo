@@ -65,6 +65,12 @@ public class RoomsController {
         return roomsRepository.findAll();
     }
 
+    @GetMapping({"/{roomNo}"})
+    public Room getRoomByRoomNo(@PathVariable int roomNo) {
+
+        return RoomService.findRoomByRoomNo(roomNo);
+    }
+
     @GetMapping({"/{capacity}/{from}/{to}"})
     public ResponseEntity<String> checkAvailableRooms(@PathVariable String capacity, @PathVariable String from, @PathVariable String to) {
         int nCapacity = Integer.parseInt(capacity);
