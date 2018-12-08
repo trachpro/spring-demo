@@ -15,4 +15,6 @@ public class Message {
 
     public static final String CONFLICT = "Resource not available!";
 
+    public static final String UNAUTHORIZATION = "You don't have permission to this action";
+
 }

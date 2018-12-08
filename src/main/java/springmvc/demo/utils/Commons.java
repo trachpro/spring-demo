@@ -141,8 +141,14 @@ public class Commons {
 
     public static Reservation getReservationFromParams(MultiValueMap<String, String> params) {
 
-        Date from = Converts.convertStringToDate(params.getFirst("bookingFrom"));
-        Date to = Converts.convertStringToDate(params.getFirst("bookingTo"));
+        String sFrom = params.getFirst("bookingFrom");
+        String sTo = params.getFirst("bookingTo");
+        Date from = null;
+        Date to = null;
+        if(checkValidDateFormat(sFrom) && checkValidDateFormat(sTo)) {
+            from = Converts.convertStringToDate(params.getFirst("bookingFrom"));
+            to = Converts.convertStringToDate(params.getFirst("bookingTo"));
+        }
         String name = params.getFirst("customerName");
 
         int roomNo = Integer.parseInt(params.getFirst("roomNo"));
@@ -178,5 +184,9 @@ public class Commons {
         if (daydiff == 0) return 1;
 
         return daydiff;
+    }
+
+    public static Boolean checkValidDateFormat(String date) {
+        return date.matches("\\d{4}-\\d{2}-\\d{2}");
     }
 }

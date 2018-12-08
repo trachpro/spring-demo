@@ -10,6 +10,7 @@ import org.springframework.util.MultiValueMap;
 import org.springframework.web.bind.annotation.*;
 import springmvc.demo.models.User;
 import springmvc.demo.utils.Commons;
+import springmvc.demo.utils.Message;
 import springmvc.demo.utils.Response;
 import springmvc.demo.services.UsersService;
 
@@ -36,7 +37,7 @@ public class UsersController {
         User user = Commons.getUserFromParams(pet);
 //        System.out.println("users: " + user.getEmail());
         if(user == null) {
-            return Response.getErrorMessage("Invalid params", HttpStatus.BAD_REQUEST);
+            return Response.getErrorMessage(Message.BAD_REQUEST, HttpStatus.BAD_REQUEST);
         }
 
         return UsersService.registerNewUser(user).toResponse();
@@ -47,7 +48,7 @@ public class UsersController {
 
         if(!Commons.isManager() && !Commons.isOwner(id)) {
 
-            return Response.getErrorMessage("you don't have authorization to do this action", HttpStatus.FORBIDDEN);
+            return Response.getErrorMessage(Message.UNAUTHORIZATION, HttpStatus.FORBIDDEN);
         }
 
         return UsersService.getUserById(id).toResponse();
@@ -66,8 +67,8 @@ public class UsersController {
 
         if(!Commons.isManager() && !Commons.isOwner(id)) {
 
-            resp.put("message", "You dont have authorize to do this action");
-            return Response.getErrorMessage("You don't have authorization to do this action!", HttpStatus.FORBIDDEN);
+            resp.put("message", Message.UNAUTHORIZATION);
+            return Response.getErrorMessage(Message.UNAUTHORIZATION, HttpStatus.FORBIDDEN);
         }
 
         return UsersService.deleteUserById(id).toResponse();
