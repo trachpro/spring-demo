@@ -13,6 +13,7 @@ import springmvc.demo.models.Reservation;
 import springmvc.demo.models.ResponseModel;
 import springmvc.demo.services.ReservationService;
 import springmvc.demo.utils.Commons;
+import springmvc.demo.utils.Message;
 import springmvc.demo.utils.Response;
 
 import java.util.Map;
@@ -29,7 +30,7 @@ public class ReservationsController {
     @GetMapping("/{code}")
     public @ResponseBody ResponseEntity<String> getReservation(@PathVariable String code) {
         if (code.length() == 0) {
-            return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST).toResponse();
+            return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST).toResponse();
         }
 
         return ReservationService.findReservation(code).toResponse();
@@ -46,7 +47,7 @@ public class ReservationsController {
         Reservation reservation = Commons.getReservationFromParams(params);
 
         if(reservation == null) {
-            return new ResponseModel(JSONObject.NULL, "Invalid parameters", HttpStatus.BAD_REQUEST).toResponse();
+            return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST).toResponse();
         }
 
         return ReservationService.addNewReservation(reservation).toResponse();
@@ -69,7 +70,7 @@ public class ReservationsController {
     @PutMapping("/cancel/{code}")
     public @ResponseBody ResponseEntity<String> cancelReservation(@PathVariable String code) {
         if (code.length() == 0) {
-            return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST).toResponse();
+            return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST).toResponse();
         }
 
         return ReservationService.cancelReservation(code).toResponse();
@@ -78,7 +79,7 @@ public class ReservationsController {
     @PutMapping("/check-in/{code}")
     public @ResponseBody ResponseEntity<String> checkin(@PathVariable String code) {
         if (code.length() == 0) {
-            return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST).toResponse();
+            return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST).toResponse();
         }
 
         return ReservationService.checkin(code).toResponse();
@@ -87,7 +88,7 @@ public class ReservationsController {
     @PutMapping("/check-out/{code}")
     public @ResponseBody ResponseEntity<String> checkout(@PathVariable String code) {
         if (code.length() == 0) {
-            return new ResponseModel(JSONObject.NULL, "Invalid input", HttpStatus.BAD_REQUEST).toResponse();
+            return new ResponseModel(JSONObject.NULL, Message.BAD_REQUEST, HttpStatus.BAD_REQUEST).toResponse();
         }
 
         return ReservationService.checkout(code).toResponse();

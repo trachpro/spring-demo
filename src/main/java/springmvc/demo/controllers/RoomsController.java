@@ -11,6 +11,7 @@ import springmvc.demo.repositories.rooms.RoomsRepository;
 import springmvc.demo.models.Room;
 import springmvc.demo.services.RoomService;
 import springmvc.demo.utils.Converts;
+import springmvc.demo.utils.Message;
 
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +56,7 @@ public class RoomsController {
             return new ResponseEntity<>(Converts.convertModelToJson(a).toString(), HttpStatus.BAD_REQUEST);
         }catch (Exception e) {
 
-            return new ResponseEntity<>("internal error", HttpStatus.INTERNAL_SERVER_ERROR);
+            return new ResponseEntity<>(Message.INTERNAL_ERROR, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
 

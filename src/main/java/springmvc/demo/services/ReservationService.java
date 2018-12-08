@@ -136,6 +136,12 @@ public class ReservationService {
      */
     public static ResponseModel checkin(String code) {
         try{
+            Reservation re = findReservationByCode(code);
+            if(re == null) {
+                return new ResponseModel(JSONObject.NULL, Message.NOT_FOUND, HttpStatus.NOT_FOUND);
+            } else if( !re.getStatus().equals("BOOKING") ) {
+                return new ResponseModel(JSONObject.NULL, Message.CONFLICT, HttpStatus.CONFLICT);
+            }
 
             Date checkinTime = new Date();
 
@@ -156,7 +162,12 @@ public class ReservationService {
      */
     public static ResponseModel checkout(String code) {
         try{
-
+            Reservation re = findReservationByCode(code);
+            if(re == null) {
+                return new ResponseModel(JSONObject.NULL, Message.NOT_FOUND, HttpStatus.NOT_FOUND);
+            } else if( !re.getStatus().equals("CHECK-IN") ) {
+                return new ResponseModel(JSONObject.NULL, Message.CONFLICT, HttpStatus.CONFLICT);
+            }
 
             Date checkoutTime = new Date();
 
@@ -183,11 +194,13 @@ public class ReservationService {
         String msg = "";
         if(checkinTime != null) {
             reservation.setCheckin(checkinTime);
+            reservation.setStatus("CHECK-IN");
             msg = "Check-in successfully";
         }
 
 
         if(checkoutTime != null) {
+            reservation.setStatus("FINISHED");
             reservation.setCheckout(checkoutTime);
             msg = "Check-out successfully";
         }
