@@ -194,20 +194,18 @@ public class ReservationService {
         String msg = "";
         if(checkinTime != null) {
             reservation.setCheckin(checkinTime);
-            reservation.setStatus("CHECK-IN");
             msg = "Check-in successfully";
         }
 
 
         if(checkoutTime != null) {
-            reservation.setStatus("FINISHED");
             reservation.setCheckout(checkoutTime);
             msg = "Check-out successfully";
         }
 
 
         reservation.setStatus(status);
-
+        reservationsRepository.save(reservation);
         return new ResponseModel(reservation, Message.SUCCESS, HttpStatus.OK);
     }
 
