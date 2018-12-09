@@ -84,6 +84,6 @@ public class StaffsController {
         if(!Commons.isValidPassword(body.getFirst("newPassword"))) {
             return Response.getErrorMessage("Invalid password!", HttpStatus.BAD_REQUEST);
         }
-        return StaffsService.changePassword().toResponse();
+        return StaffsService.changePassword(body.getFirst("newPassword")).toResponse();
     }
 }
