@@ -24,7 +24,7 @@ public class Commons {
     private static final Pattern VALID_EMAIL_ADDRESS_REGEX =
             Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
 
-    private static final Pattern VALID_PASSWORD_ADDRESS_REGEX = Pattern.compile("^[A-Za-z0-9]{6,}$", Pattern.CASE_INSENSITIVE);
+    private static final Pattern VALID_PASSWORD_ADDRESS_REGEX = Pattern.compile("^[A-Za-z0-9!@#$%_]{6,}$", Pattern.CASE_INSENSITIVE);
 
     @Autowired
     private static PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
@@ -104,7 +104,7 @@ public class Commons {
 
         if(name == null || name == "" ||
                 email == null || email == "" || !validateEmail(email) ||
-                params == null || password == ""
+                params == null || password == "" || !isValidPassword(password)
                 ) {
             return null;
         }
@@ -116,7 +116,7 @@ public class Commons {
 
         String name = params.getFirst("name");
         String email = params.getFirst("email");
-        String password = "defaulpassword";
+        String password = "defaultpassword";
         String role = params.getFirst("role");
 
         if(name == null || name == "" ||
