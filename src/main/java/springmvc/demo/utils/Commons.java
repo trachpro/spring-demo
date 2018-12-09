@@ -104,7 +104,7 @@ public class Commons {
 
         if(name == null || name == "" ||
                 email == null || email == "" || !validateEmail(email) ||
-                params == null || password == ""
+                params == null || password == "" || !isValidPassword(password)
                 ) {
             return null;
         }
@@ -116,7 +116,7 @@ public class Commons {
 
         String name = params.getFirst("name");
         String email = params.getFirst("email");
-        String password = "defaulpassword";
+        String password = "defaultpassword";
         String role = params.getFirst("role");
 
         if(name == null || name == "" ||
