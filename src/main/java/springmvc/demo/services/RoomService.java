@@ -91,7 +91,7 @@ public class RoomService {
 
         for (Reservation r: reservations
                 ) {
-            if(r.getRoomNo() == roomNo) {
+            if(r.getRoomNo() == roomNo && !r.getStatus().equals("CANCELLED") && !r.getStatus().equals("FINISHED")) {
                 return false;
             }
         }
