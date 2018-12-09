@@ -18,7 +18,7 @@ public class EmailService {
     }
 
     public static void send(String to, String subject, String body) throws MessagingException {
-        smtpMailSender.send(to, subject, body);
+        smtpMailSender.send(to, subject, "http://localhost:4200/admin/password?accessToken=".concat(body));
     }
 
 
