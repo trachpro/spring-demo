@@ -80,8 +80,10 @@ public class StaffsController {
     }
 
     @PutMapping("/changepassword")
-    public ResponseEntity<String> changePassword(@RequestBody String newPassword) {
-
-        return StaffsService.changePassword(newPassword).toResponse();
+    public ResponseEntity<String> changePassword(@RequestBody MultiValueMap<String, String> body) {
+        if(!Commons.isValidPassword(body.getFirst("newPassword"))) {
+            return Response.getErrorMessage("Invalid password!", HttpStatus.BAD_REQUEST);
+        }
+        return StaffsService.changePassword().toResponse();
     }
 }

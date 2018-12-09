@@ -150,7 +150,7 @@ public class StaffsService {
 
             staffsRepository.save(staff);
 
-            return new ResponseModel(staff,"delete successful", HttpStatus.OK);
+            return new ResponseModel(staff,"change successfully", HttpStatus.OK);
         } catch (Exception e){
 
             return new ResponseModel(null,"Internal error!", HttpStatus.INTERNAL_SERVER_ERROR);
